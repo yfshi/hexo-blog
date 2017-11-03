@@ -85,7 +85,7 @@ index_with_subtitle: false
 # Value after `||` delimeter is the name of FontAwesome icon. If icon (with or without delimeter) is not specified, question icon will be loaded.
 menu:
   home: / || home
-  #about: /about/ || user
+  about: /about/ || user
   tags: /tags/ || tags
   categories: /categories/ || th
   archives: /archives/ || archive
@@ -103,7 +103,8 @@ menu_icons:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Muse
+scheme: Pisces
+#scheme: Muse
 #scheme: Mist
 #scheme: Pisces
 #scheme: Gemini
@@ -132,7 +133,7 @@ social:
 
 social_icons:
   enable: true
-  icons_only: false
+  icons_only: true
   transition: false
 
 # Blog rolls
@@ -146,7 +147,7 @@ links_layout: block
 # Sidebar Avatar
 # in theme directory(source/images): /images/avatar.gif
 # in site  directory(source/uploads): /uploads/avatar.gif
-#avatar: /images/avatar.gif
+avatar: /images/avatar.png
 
 # Table Of Contents in the Sidebar
 toc:
@@ -183,7 +184,7 @@ sidebar:
   offset: 12
 
   # Back to top in sidebar (only for Pisces | Gemini).
-  b2t: false
+  b2t: true
 
   # Scroll percent label in b2t button.
   scrollpercent: false
@@ -345,7 +346,7 @@ han: false
 #swiftype_key:
 
 # Baidu Analytics ID
-#baidu_analytics:
+baidu_analytics: 842071952d3d3b6387fa2207f3c39fc0
 
 # Duoshuo ShortName
 #duoshuo_shortname:
@@ -388,16 +389,16 @@ valine:
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
 gitment:
-  enable: false
+  enable: true
   mint: true # RECOMMEND, A mint on Gitment, to support count, language and proxy_gateway
   count: true # Show comments count in post meta area
   lazy: false # Comments lazy loading with a button
   cleanly: false # Hide 'Powered by ...' on footer, and more
   language: # Force language, or auto switch by theme
-  github_user: # MUST HAVE, Your Github ID
-  github_repo: # MUST HAVE, The repo you use to store Gitment comments
-  client_id:   # MUST HAVE, Github client id for the Gitment
-  client_secret: # EITHER this or proxy_gateway, Github access secret token for the Gitment
+  github_user: yfshi # MUST HAVE, Your Github ID
+  github_repo: yfshi.github.io # MUST HAVE, The repo you use to store Gitment comments
+  client_id: 18d7635b1e4a2fdfe685  # MUST HAVE, Github client id for the Gitment
+  client_secret: 63ed99d9f101933f3e23e9afd54d251e5fa726ee # EITHER this or proxy_gateway, Github access secret token for the Gitment
   proxy_gateway: # Address of api proxy, See: https://github.com/aimingoo/intersect
   redirect_protocol: # Protocol of redirect_uri with force_redirect_protocol when mint enabled
 
@@ -405,8 +406,8 @@ gitment:
 # Available value:
 #    button | slide
 # Warning: Baidu Share does not support https.
-#baidushare:
-##  type: button
+baidushare:
+  type: slide
 
 # Share
 # This plugin is more useful in China, make sure you known how to use it.
@@ -518,9 +519,9 @@ rating:
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: false
-  app_id: #<app_id>
-  app_key: #<app_key>
+  enable: true
+  app_id: 0u7lJb1mcU1WrSpXiCBhjD2U-gzGzoHsz
+  app_key: 5lY33m1Uey4z1cy0aJvsv2Qm
 
 # Another tool to show number of visitors to each article.
 # visit https://console.firebase.google.com/u/0/ to get apiKey and projectId
@@ -558,7 +559,7 @@ busuanzi_count:
 
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO
-baidu_push: false
+baidu_push: true
 
 # Google Calendar
 # Share your recent schedule to others via calendar page
@@ -590,12 +591,12 @@ algolia_search:
 # Local search
 # Dependencies: https://github.com/flashlab/hexo-generator-search
 local_search:
-  enable: false
+  enable: true
   # if auto, trigger search by changing input
   # if manual, trigger search by pressing enter key or search button
   trigger: auto
   # show top n results per article, show all results by setting to -1
-  top_n_per_article: 1
+  top_n_per_article: -1
 
 
 # ---------------------------------------------------------------
