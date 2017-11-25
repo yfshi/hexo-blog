@@ -129,3 +129,63 @@ static void QuickSortAsc(int *arr, int left, int right)
 }
 ```
 
+# 选择排序
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+static void RandInitArray(int *arr, int num);
+static void PrintArray(int *arr, int num);
+static void SelectSortAsc(int *arr, int num);
+
+#define ARR_SIZE 20
+
+int main()
+{
+	int arr[ARR_SIZE];
+	RandInitArray(arr, ARR_SIZE);
+	SelectSortAsc(arr, ARR_SIZE);
+	PrintArray(arr, ARR_SIZE);
+}
+
+static void RandInitArray(int *arr, int num)
+{
+	int i;
+	for (i=0; i<num; i++)
+		arr[i] = random()%100;
+}
+
+static void PrintArray(int *arr, int num)
+{
+	int i;
+	for (i=0; i<num; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+}
+
+static void SelectSortAsc(int *arr, int num)
+{
+	int i, j;
+	int min, tmp;
+
+	for (i=0; i<num-1; i++)
+	{
+		min = i;
+
+		for (j=i+1; j<num; j++)
+		{
+			if (arr[min] > arr[j])
+				min = j;
+		}
+
+		if (min != i)
+		{
+			tmp = arr[min];
+			arr[min] = arr[i];
+			arr[i] = tmp;
+		}
+	}
+}
+```
+
