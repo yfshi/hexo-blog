@@ -397,8 +397,8 @@ gitment:
   language: # Force language, or auto switch by theme
   github_user: yfshi # MUST HAVE, Your Github ID
   github_repo: yfshi.github.io # MUST HAVE, The repo you use to store Gitment comments
-  client_id: 18d7635b1e4a2fdfe685  # MUST HAVE, Github client id for the Gitment
-  client_secret: 63ed99d9f101933f3e23e9afd54d251e5fa726ee # EITHER this or proxy_gateway, Github access secret token for the Gitment
+  client_id: ea6cf0aa24a24996f1e9  # MUST HAVE, Github client id for the Gitment
+  client_secret: 63ed99d9f101933f3e23e9afd54d251e5fa726ee  # EITHER this or proxy_gateway, Github access secret token for the Gitment
   proxy_gateway: # Address of api proxy, See: https://github.com/aimingoo/intersect
   redirect_protocol: # Protocol of redirect_uri with force_redirect_protocol when mint enabled
 
