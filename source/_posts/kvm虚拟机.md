@@ -122,12 +122,12 @@ ip addr add 10.10.10.1/24 dev br0
      <devices>
        <emulator>/usr/bin/kvm</emulator>
        <disk type='file' device='disk'>
-         <driver name='qemu' type='qcow2'/>
+         <driver name='qemu' type='qcow2' cache='none'/>
          <source file='/vmhosts/kvm/centos7.0.qcow2'/>
          <target dev='vda' bus='virtio'/>
        </disk>
        <disk type='file' device='cdrom'>
-         <driver name='qemu' type='raw'/>
+         <driver name='qemu' type='raw' cache='none'/>
          <target dev='hda' bus='ide'/>
          <readonly/>
        </disk>
