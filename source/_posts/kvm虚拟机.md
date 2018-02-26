@@ -122,7 +122,7 @@ ip addr add 10.10.10.1/24 dev br0
      <devices>
        <emulator>/usr/bin/kvm</emulator>
        <disk type='file' device='disk'>
-         <driver name='qemu' type='qcow2' cache='none'/>
+         <driver name='qemu' type='qcow2' cache='writeback'/>
          <source file='/vmhosts/kvm/centos7.0.qcow2'/>
          <target dev='vda' bus='virtio'/>
        </disk>
@@ -143,6 +143,7 @@ ip addr add 10.10.10.1/24 dev br0
      </devices>
    </domain>
    ```
+   linux默认有virtio驱动，磁盘总线等可以设置为virtio。如果是虚拟机是windows，如果要使用virtio，需要安装驱动官网下载，否则速度很慢。或者windows的disk的总线可以选择和宿主机一致比如是sata。
 
 3. 定义虚拟机
 
