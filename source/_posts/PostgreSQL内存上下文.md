@@ -75,7 +75,7 @@ typedef struct MemoryContextData
 
 typedef struct MemoryContextData *MemoryContext;
 ```
-MemoryContext中的methods字段是一个MemoryContextMethods类型，它是由一系列的函数指针组成的集合，其中包含了对内存上下文操作的函数。对不同的MemoryContext实现，可以设置不同的方法集合。目前MemoryContext中只有AllocSetContext一种实现，因此KingbaseES中只有针对AllocSetContext的一种操作函数集合，由全局变量AllocSetMethods表示。
+MemoryContext中的methods字段是一个MemoryContextMethods类型，它是由一系列的函数指针组成的集合，其中包含了对内存上下文操作的函数。对不同的MemoryContext实现，可以设置不同的方法集合。目前MemoryContext中只有AllocSetContext一种实现，因此PostgreSQL中只有针对AllocSetContext的一种操作函数集合，由全局变量AllocSetMethods表示。
 
 ---
 
