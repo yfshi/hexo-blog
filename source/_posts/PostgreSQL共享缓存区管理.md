@@ -7,7 +7,7 @@ tags:
 ---
 
 # 共享缓冲区
-KingbaseES中的buffer主要是用来将外存中的数据内容读入到内存中，加速运算过程中对数据的访问速度，同时将数据的修改进行缓存，在必要时再将其写出到外存，避免频繁的I/O，以提高效率。
+PostgreSQL中的buffer主要是用来将外存中的数据内容读入到内存中，加速运算过程中对数据的访问速度，同时将数据的修改进行缓存，在必要时再将其写出到外存，避免频繁的I/O，以提高效率。
 Buffer的种类有很多如Audit buffers、Clog buffers、Data buffers和Xlog buffers，此处所介绍的buffer管理是针对Data buffers而言的。
 
 # 数据结构
@@ -49,7 +49,7 @@ typedef struct sbufdesc
 引用计数（refcount）用于跟踪访问buffer的后台数量，防止错误的将正在被使用的Buffer淘汰。当使用Buffer时，需要将其引用计数（refcount）加1（PinBuffer）。当Buffer不再使用，需要将其引用计数（refcount）减1（UnpinBuffer）。这里需要注意，由于一个后台可以多次访问同一个Buffer，因此后台通过PrivateRefCount来记录自己的引用次数，只有当自己对一个Buffer的引用减少到0，才会真正去修改refcount。PrivateRefCount在后台PinBuffer时将其值加1，UnpinBuffer时将其值减1。
 
 ## 使用计数（BufferDesc.usage_count）
-usage_count用来标记Buffer被使用的次数，usage_count值越大，说明该Buffer经常被使用，那么在未来的一段时间里被使用的可能就比较大，所以这样的Buffer不能作为被替换的对象；相反，usage_count值越小，说明经常不被使用，可以作为替换的对象。在KingbaseES中，只有当usage_count为0时，才可能作为替换的对象。
+usage_count用来标记Buffer被使用的次数，usage_count值越大，说明该Buffer经常被使用，那么在未来的一段时间里被使用的可能就比较大，所以这样的Buffer不能作为被替换的对象；相反，usage_count值越小，说明经常不被使用，可以作为替换的对象。在PostgreSQL中，只有当usage_count为0时，才可能作为替换的对象。
 usage_count是在一个后台不再使用该Buffer即UnpinBuffer将后台的PrivateRefCount减少为0的时候将其值加1，以表示该Buffer最近被一个后台使用了。对VACUUN操作来说，不会修改usage_count的值，且如果refcount和usage_count的值都为0，则将buffer放入到FreeList的尾部。
 
 ## BufferStrategyControl
@@ -93,7 +93,7 @@ static MT_LOCAL BufferStrategyControl
 当执行DROP TABLE时，可以确定该表的所有buffer都会失效，因此将此表的所有buffer都放入到Freelist的头部，这样可以在下一次分配buffer时，直接从Freelist中得到buffer，而不需要执行Clock Sweep算法。
 
 ## Clock-sweep
-当Buffer的refcount计数变成0的时候，代表当前系统没有后台引用此数据块。在KingbaseES中，为了能够减低锁的粒度、提高并发性，引用计数等于0的的Buffer并没有被放入Freelist中。在随机访问大量磁盘块、并且没有VACUUM的干扰下，Freelist几乎是空的（除了刚刚启动时）。这里的策略主要是为了避免不必要的持有操作Freelist的互斥锁。
+当Buffer的refcount计数变成0的时候，代表当前系统没有后台引用此数据块。在PostgreSQL中，为了能够减低锁的粒度、提高并发性，引用计数等于0的的Buffer并没有被放入Freelist中。在随机访问大量磁盘块、并且没有VACUUM的干扰下，Freelist几乎是空的（除了刚刚启动时）。这里的策略主要是为了避免不必要的持有操作Freelist的互斥锁。
 由于大部分时候Buffer不会立即被放入到Freelist中，因此使用了一种被称为Clock Sweep的算法来分配Buffer。此算法类似教科书中时钟算法，每当需要使用Clock Sweep算法选择一个Buffer时，就从上次分配的Buffer的下一个位置开始，搜索引用计数为0（既没有被pin的Buffer）且usage_count为0的Buffer。如果该Buffer不满足上述条件，就将usage_count减1。
 
 ## Clock-sweep
