@@ -135,6 +135,7 @@ ip addr add 10.10.10.1/24 dev br0
          <source bridge='br0'/>
          <model type='virtio'/>
        </interface>
+       <input type='tablet' bus='usb'/>
        <input type='mouse' bus='ps2'/>
        <input type='keyboard' bus='ps2'/>
        <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'>
