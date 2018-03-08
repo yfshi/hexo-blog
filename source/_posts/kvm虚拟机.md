@@ -87,7 +87,13 @@ ip addr add 10.10.10.1/24 dev br0
 
    使用 qcow2 格式的磁盘镜像的好处就是它在创建之初并不会给它分配全部大小磁盘容量，而是随着虚拟机中文件的增加而逐渐增大。因此，它对空间的使用更加有效。
 
-2. 建立xml配置文件centos7.0.xml
+2. 建立`xml`配置文件
+
+   `linux`默认有`virtio`驱动，磁盘总线、网卡等可以设置为`virtio`。
+
+   `windows`要使用`virtio`，需要安装`virtio`驱动。或者`windows`的`disk`的总线可以选择和宿主机一致比如是`sata`，网卡可以设置为`rt8139`，`<hyperv>...</hyperv>`域是针对`windows`的优化。实际上使用时发现在机械硬盘是使用`windows`，`io`效率很低，无论是否使用`virtio`驱动，可能有什么地方需要优化没搞懂，后来把`windows`的存储放到`ssd`上了。
+
+   **centos7.0.xml**
 
    ```xml
    <domain type='kvm'>
@@ -97,6 +103,7 @@ ip addr add 10.10.10.1/24 dev br0
      <vcpu placement='static'>2</vcpu>
      <os>
        <type arch='x86_64'>hvm</type>
+       <boot dev='cdrom'/>
        <boot dev='hd'/>
      </os>
      <features>
@@ -128,6 +135,7 @@ ip addr add 10.10.10.1/24 dev br0
        </disk>
        <disk type='file' device='cdrom'>
          <driver name='qemu' type='raw' cache='none'/>
+         <source file='/iso/centos7.0.iso'/>
          <target dev='hda' bus='ide'/>
          <readonly/>
        </disk>
@@ -144,7 +152,77 @@ ip addr add 10.10.10.1/24 dev br0
      </devices>
    </domain>
    ```
-   linux默认有virtio驱动，磁盘总线等可以设置为virtio。如果是虚拟机是windows，如果要使用virtio，需要安装驱动官网下载，否则速度很慢。或者windows的disk的总线可以选择和宿主机一致比如是sata。
+   **win7**
+
+   ```shell
+   <domain type='kvm'>
+     <name>win7</name>
+     <memory unit='KiB'>2097152</memory>
+     <currentMemory unit='KiB'>2097152</currentMemory>
+     <vcpu placement='static'>2</vcpu>
+     <os>
+       <type arch='x86_64'>hvm</type>
+       <boot dev='cdrom'/>
+       <boot dev='hd'/>
+     </os>
+     <features>
+       <acpi/>
+       <apic/>
+       <hyperv>
+         <relaxed state='on'/>
+         <vapic state='on'/>
+         <spinlocks state='on' retries='4096'/>
+         <vpindex state='on'/>
+         <runtime state='on'/>
+         <synic state='on'/>
+         <reset state='on'/>
+       </hyperv>
+       <vmport state='off'/>
+     </features>
+     <cpu mode='host-model' check='partial'>
+       <model fallback='allow'/>
+     </cpu>
+     <clock offset='localtime'>
+       <timer name='rtc' tickpolicy='catchup'/>
+       <timer name='pit' tickpolicy='delay'/>
+       <timer name='hpet' present='no'/>
+       <timer name='hypervclock' present='yes'/>
+     </clock>
+     <on_poweroff>destroy</on_poweroff>
+     <on_reboot>restart</on_reboot>
+     <on_crash>restart</on_crash>
+     <pm>
+       <suspend-to-mem enabled='no'/>
+       <suspend-to-disk enabled='no'/>
+     </pm>
+     <devices>
+       <emulator>/usr/bin/kvm</emulator>
+       <disk type='file' device='disk'>
+         <driver name='qemu' type='qcow2' cache='writeback'/>
+         <source file='/vmhosts/kvm/centos7.0.qcow2'/>
+         <target dev='sda' bus='sata'/>
+       </disk>
+       <disk type='file' device='cdrom'>
+         <driver name='qemu' type='raw' cache='none'/>
+         <source file='/iso/win7.iso'/>
+         <target dev='hda' bus='ide'/>
+         <readonly/>
+       </disk>
+       <interface type='bridge'>
+         <source bridge='br0'/>
+         <model type='rt8139'/>
+       </interface>
+       <input type='tablet' bus='usb'/>
+       <input type='mouse' bus='ps2'/>
+       <input type='keyboard' bus='ps2'/>
+       <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'>
+         <listen type='address' address='0.0.0.0'/>
+       </graphics>
+     </devices>
+   </domain>
+   ```
+
+   ​
 
 3. 定义虚拟机
 
@@ -166,6 +244,7 @@ ip addr add 10.10.10.1/24 dev br0
    ```shell
    vncviwer localhost:5900
    ```
+   安装好系统，装完必要的环境之后可以把存储(centos7.0.qcow2)备份。之后再需要系统时直接拷贝过来使用即可。
 
 6. 常用命令
 
