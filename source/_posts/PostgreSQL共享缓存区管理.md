@@ -67,7 +67,7 @@ static MT_LOCAL BufferStrategyControl
 ```
 
 ## Buffer Descriptors
-![](./BufferDescriptor.png)
+![](/img/BufferDescriptor.png)
 
 
 # 主要函数
@@ -79,10 +79,10 @@ static MT_LOCAL BufferStrategyControl
 - UnpinBuffer
 
 ## InitBufferPool流程
-![](./InitBufferPool.svg)
+![](/img/InitBufferPool.svg)
 
 ## BufferAlloc流程
-![](./BufferAlloc.svg)
+![](/img/BufferAlloc.svg)
 
 # 缓冲区替换策略
 - FreeList
@@ -97,7 +97,7 @@ static MT_LOCAL BufferStrategyControl
 由于大部分时候Buffer不会立即被放入到Freelist中，因此使用了一种被称为Clock Sweep的算法来分配Buffer。此算法类似教科书中时钟算法，每当需要使用Clock Sweep算法选择一个Buffer时，就从上次分配的Buffer的下一个位置开始，搜索引用计数为0（既没有被pin的Buffer）且usage_count为0的Buffer。如果该Buffer不满足上述条件，就将usage_count减1。
 
 ## Clock-sweep
-![](./Clock-sweep.png)
+![](/img/Clock-sweep.png)
 > 在上图中Clock Sweep算法从4号buffer开始查找（记录在StrategyControl结构体中）可用的buffer。4号buffer因为引用计数大于0，因此不能被替换。5号buffer虽然没有人引用，但是其usage_count大于0，因此表示此buffer使用频率较高，因此将usage_count减1，并查看6号buffer。6号buffer的引用计数和usage_count都为0，因此选择将6号buffer淘汰。记录下一次搜索的位置是7号，并退出选择算法。
 
 ## buffer-ring
