@@ -126,6 +126,35 @@ function st2node()
 #
 ########################################################
 NODEPOINT=".nodepoint"
+function file_check()
+{
+	if [ "x$1" = "x" ]; then
+		return
+	elif [ ! -f "$1" ]; then
+		error "no such file: $1"
+	fi
+
+	local left
+	local right
+	left=`cat $1 | grep -o '{'`
+	right=`cat $1 | grep -o '}'`
+	if [ $left -ne $right ]; then
+		error "{ and } are not mismatch"
+	fi
+
+	left=`cat $1 | grep -o '('`
+	right=`cat $1 | grep -o ')'`
+	if [ $left -ne $right ]; then
+		error "( and ) are not mismatch"
+	fi
+
+	left=`cat $1 | grep -o '<'`
+	right=`cat $1 | grep -o '>'`
+	if [ $left -ne $right ]; then
+		error "< and > are not mismatch"
+	fi
+}
+
 function file_trim()
 {
 	if [ "x$1" = "x" ]; then
@@ -352,6 +381,7 @@ TMPFILE=".$1"
 
 cd $TMPDIR
 
+file_check $TMPFILE
 file_trim $TMPFILE
 file_trim2format1 $TMPFILE
 file_format12format2 $TMPFILE
