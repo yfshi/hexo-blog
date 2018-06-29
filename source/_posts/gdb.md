@@ -46,6 +46,12 @@ handle SIGUSR2 nostop noprint pass #设置信号处理方式
    (gdb) list
    ```
 
+# 多进程调试
+
+set follow-fork-mode [parent | child]
+
+set detach-on-fork [on|off]
+
 # 多线程调试
 
 调试多线程时，有时需要控制某些线程停在断点，有些线程继续执行。有时需要控制线程的运行顺序。有时需要中断某个线程，切换到其他线程。这些都可以通过gdb实现。
