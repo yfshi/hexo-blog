@@ -116,9 +116,21 @@ set print vtbl -- Set printing of C++ virtual function tables
 
 `LD_LIBRARY_PATH`环境变量用于在程序加载运行期间查找动态链接库时指定除了系统默认路径之外的其他路径。注意，`LD_LIBRARY_PATH`中指定的路径会在系统默认路径之前进行查找。
 
-设置方法都是通过`export`命令。
-
+使用方法：
 ```bash
 export LIBRARY_PATH=`pwd`:$LIBRARY_PATH
 export LD_LIBRARY_PATH=`pwd`:$LIBRARY_PATH
+或
+LIBRARY_PATH=`pwd`:$LIBRARY_PATH make
+LD_LIBRARY_PATH=`pwd`:$LIBRARY_PATH make
+```
+
+# C_INCLUDE_PATH、CPLUS_INCLUDE_PATH
+与LIBRARY_PATH类似，gcc编译期间查找指定的头文件路径。也可以在gcc加上-I参数指定头文件路径。
+
+使用方法：
+```shell
+export C_INCLUDE_PATH=`pwd`/include:$C_INCLUDE_PATH
+或
+C_INCLUDE_PATH=`pwd`/include make
 ```
