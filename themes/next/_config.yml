@@ -371,12 +371,12 @@ changyan:
 # You can get your appid and appkey from https://leancloud.cn
 # more info please open https://github.com/xCss/Valine
 valine:
-  enable: false
-  appid:  # your leancloud application appid
-  appkey:  # your leancloud application appkey
-  notify: false # mail notifier , https://github.com/xCss/Valine/wiki
-  verify: false # Verification code
-  placeholder: Comment input placeholder
+  enable: true
+  appid: 0u7lJb1mcU1WrSpXiCBhjD2U-gzGzoHsz  # your leancloud application appid
+  appkey: 5lY33m1Uey4z1cy0aJvsv2Qm # your leancloud application appkey
+  notify: true # mail notifier , https://github.com/xCss/Valine/wiki
+  verify: true # Verification code
+  placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!'
 
 # Support for youyan comments system.
 # You can get your uid from http://www.uyan.cc
