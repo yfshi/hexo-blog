@@ -1,3 +1,11 @@
+# ===============================================================
+# ========================= ATTENTION! ==========================
+# ===============================================================
+# NexT repository is moving here: https://github.com/theme-next
+# ===============================================================
+# It's rebase to v6.0.0 and future maintenance will resume there
+# ===============================================================
+
 # ---------------------------------------------------------------
 # Theme Core Configuration Settings
 # ---------------------------------------------------------------
@@ -19,15 +27,15 @@ override: false
 # For example, you put your favicons into `hexo-site/source/images` directory.
 # Then need to rename & redefine they on any other names, otherwise icons from Next will rewrite your custom icons in Hexo.
 favicon:
-  small: /images/avatar.jpg
-  medium: /images/avatar.jpg
-  apple_touch_icon: /images/avatar.jpg
-  safari_pinned_tab: /images/avatar.jpg
+  small: /images/favicon.ico
+  medium: /images/favicon.ico
+  apple_touch_icon: /images/favicon.ico
+  safari_pinned_tab: /images/favicon.ico
   #android_manifest: /images/manifest.json
   #ms_browserconfig: /images/browserconfig.xml
 
 # Set default keywords (Use a comma to separate)
-keywords: "Hexo, NexT"
+keywords: "FYSBlog, shiyuefei, yfshi"
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
@@ -103,11 +111,10 @@ menu_icons:
 # ---------------------------------------------------------------
 
 # Schemes
-scheme: Gemini
 #scheme: Muse
 #scheme: Mist
 #scheme: Pisces
-#scheme: Gemini
+scheme: Gemini
 
 
 # ---------------------------------------------------------------
@@ -134,7 +141,7 @@ social:
 social_icons:
   enable: true
   icons_only: true
-  transition: false
+  transition: true
 
 # Blog rolls
 links_icon: link
@@ -184,7 +191,7 @@ sidebar:
   offset: 12
 
   # Back to top in sidebar (only for Pisces | Gemini).
-  b2t: true
+  b2t: false
 
   # Scroll percent label in b2t button.
   scrollpercent: false
@@ -235,9 +242,9 @@ post_wordcount:
   #description: ex. subscribe to my blog by scanning my public wechat account
 
 # Reward
-# reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+#reward_comment: Donate comment here
 wechatpay: /images/wechatpay.jpg
-alipay: /images/alipay.jpg
+#alipay: /images/alipay.jpg
 #bitcoin: /images/bitcoin.png
 
 # Declare license on posts
@@ -369,14 +376,18 @@ changyan:
 
 # Valine.
 # You can get your appid and appkey from https://leancloud.cn
-# more info please open https://github.com/xCss/Valine
+# more info please open https://valine.js.org
 valine:
   enable: true
-  appid: 0u7lJb1mcU1WrSpXiCBhjD2U-gzGzoHsz  # your leancloud application appid
+  appid: 0u7lJb1mcU1WrSpXiCBhjD2U-gzGzoHsz # your leancloud application appid
   appkey: 5lY33m1Uey4z1cy0aJvsv2Qm # your leancloud application appkey
   notify: true # mail notifier , https://github.com/xCss/Valine/wiki
   verify: true # Verification code
-  placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!'
+  placeholder: Just go go # comment box placeholder
+  avatar: mm # gravatar style
+  guest_info: nick,mail # custom comment header
+  pageSize: 10 # pagination size
+
 
 # Support for youyan comments system.
 # You can get your uid from http://www.uyan.cc
@@ -388,17 +399,18 @@ valine:
 
 # Gitment
 # Introduction: https://imsun.net/posts/gitment-introduction/
+# You can get your Github ID from https://api.github.com/users/<Github username>
 gitment:
   enable: false
   mint: true # RECOMMEND, A mint on Gitment, to support count, language and proxy_gateway
   count: true # Show comments count in post meta area
-  lazy: true # Comments lazy loading with a button
+  lazy: false # Comments lazy loading with a button
   cleanly: false # Hide 'Powered by ...' on footer, and more
   language: # Force language, or auto switch by theme
-  github_user: yfshi # MUST HAVE, Your Github ID
-  github_repo: yfshi.github.io # MUST HAVE, The repo you use to store Gitment comments
-  client_id: ea6cf0aa24a24996f1e9  # MUST HAVE, Github client id for the Gitment
-  client_secret: 63ed99d9f101933f3e23e9afd54d251e5fa726ee  # EITHER this or proxy_gateway, Github access secret token for the Gitment
+  github_user: # MUST HAVE, Your Github ID
+  github_repo: # MUST HAVE, The repo you use to store Gitment comments
+  client_id: # MUST HAVE, Github client id for the Gitment
+  client_secret: # EITHER this or proxy_gateway, Github access secret token for the Gitment
   proxy_gateway: # Address of api proxy, See: https://github.com/aimingoo/intersect
   redirect_protocol: # Protocol of redirect_uri with force_redirect_protocol when mint enabled
 
@@ -520,8 +532,8 @@ rating:
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
   enable: false
-  app_id: 0u7lJb1mcU1WrSpXiCBhjD2U-gzGzoHsz
-  app_key: 5lY33m1Uey4z1cy0aJvsv2Qm
+  app_id: #<app_id>
+  app_key: #<app_key>
 
 # Another tool to show number of visitors to each article.
 # visit https://console.firebase.google.com/u/0/ to get apiKey and projectId
@@ -531,6 +543,7 @@ firestore:
   collection: articles #required, a string collection name to access firestore database
   apiKey: #required
   projectId: #required
+  bluebird: false #enable this if you want to include bluebird 3.5.1(core version) Promise polyfill
 
 # Show PV/UV of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
@@ -797,4 +810,4 @@ js: js
 images: images
 
 # Theme version
-version: 5.1.3
+version: 5.1.4

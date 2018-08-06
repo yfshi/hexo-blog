@@ -46,8 +46,8 @@ page:
   tags: 标签
 
 footer:
-  powered: "生命不止"
-  theme: "奋斗不息"
+  powered: "由 %s 强力驱动"
+  theme: 主题
 
 counter:
   tag_cloud:
