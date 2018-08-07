@@ -2,6 +2,7 @@
 title: git
 date: 2018-07-31 15:22:54
 tags: git
+categories: 常用工具
 ---
 
 官方文档：

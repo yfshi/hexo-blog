@@ -2,6 +2,7 @@
 title: hostname的那点事
 date: 2017-09-19
 tags: hostname
+categories: 操作系统
 ---
 
 # hostname的本质

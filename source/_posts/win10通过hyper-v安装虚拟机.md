@@ -3,6 +3,9 @@ layout: _post
 title: win10通过hyper-v安装虚拟机
 date: 2018-04-20 13:11:55
 tags:
+- Hyper-V
+- 虚拟机
+categories: 常用工具
 ---
 
 # 安装Hyper-v组件

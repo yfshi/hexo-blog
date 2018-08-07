@@ -2,6 +2,7 @@
 title: gdb
 date: 2017-10-23
 tags: gdb
+categories: 调试
 ---
 
 # 信号处理

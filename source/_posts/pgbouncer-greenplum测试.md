@@ -1,7 +1,10 @@
 ---
 title: pgbouncer--greenplum测试
 date: 2018-07-19 15:53:57
-tags: PostgreSQL
+tags:
+- PostgreSQL
+- pgbouncer
+categories: Database
 ---
 
 # 测试环境

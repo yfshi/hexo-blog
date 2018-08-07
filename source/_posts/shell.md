@@ -1,9 +1,10 @@
 ---
 layout: post
-title: 'shell'
-date: '2017-10-23'
-categories: 'shell'
-tags: ''
+title: Shell
+date: 2017-10-23
+tags: 
+- shell
+categories: Shell
 ---
 
 # `--`

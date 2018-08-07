@@ -2,6 +2,7 @@
 title: 'centos/redhat搭建yum源'
 date: 2017-09-25
 tags: yum
+categories: 操作系统
 ---
 
 # 创建仓库

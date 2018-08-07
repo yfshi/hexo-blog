@@ -2,7 +2,10 @@
 layout: _post
 title: kvm虚拟机
 date: 2018-02-09 00:22:51
-tags: kvm虚拟机
+tags:
+- kvm
+- 虚拟机
+categories: 常用工具
 ---
 
 # 安装

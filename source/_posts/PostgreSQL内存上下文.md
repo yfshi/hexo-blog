@@ -2,8 +2,10 @@
 layout: _post
 title: PostgreSQL内存上下文
 date: 2018-01-11 15:05:42
-categories: PostgreSQL
 tags:
+- PostgreSQL
+- 内存管理
+categories: Database
 ---
 
 # 内存管理体系结构

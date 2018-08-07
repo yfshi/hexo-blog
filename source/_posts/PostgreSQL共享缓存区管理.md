@@ -2,8 +2,8 @@
 layout: _post
 title: PostgreSQL共享缓存区管理
 date: 2018-01-11 15:30:31
-categories: PostgreSQL
-tags:
+tags: PostgreSQL
+categories: Database
 ---
 
 # 共享缓冲区

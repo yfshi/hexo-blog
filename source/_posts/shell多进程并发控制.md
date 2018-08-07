@@ -1,8 +1,11 @@
 ---
-title: shell多进程并发控制
+title: Shell多进程并发控制
 date: 2017-10-25
-categories: shell
-tags: shell 多进程 并发
+categories: Shell
+tags:
+- Shell
+- 多进程
+- 并发
 ---
 
 每个进程的任务就是等待10秒，进程任务完成之后再启动一个新的进程，保证并发数是8。

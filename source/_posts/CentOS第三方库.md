@@ -2,7 +2,8 @@
 layout: _post
 title: CentOS第三方库
 date: 2018-07-11 11:36:00
-tags: linux
+tags: yum
+categories: 操作系统
 ---
 
 `Software Collections`

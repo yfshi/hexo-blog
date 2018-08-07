@@ -2,7 +2,10 @@
 layout: _post
 title: GreenPlum编译
 date: 2018-07-10 19:34:45
-tags: PostgreSQL
+tags:
+- PostgreSQL
+- GreenPlum
+categories: Database
 ---
 
 操作系统是centos6.4 x64最小安装。
