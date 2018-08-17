@@ -40,7 +40,7 @@ $ passwd gpadmin
 ## 安装工具
 
 ```shell
-$ sudo yum install -y wget zip unzip bzip2 git net-tools sysstat man gcc gcc-c++ make gdb libtool
+$ sudo yum install -y vim wget zip unzip bzip2 git net-tools sysstat man gcc gcc-c++ make gdb libtool
 ```
 
 ## 安装开发包
