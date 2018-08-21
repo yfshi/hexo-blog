@@ -92,7 +92,7 @@ greenplum要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自�
   $ tar -jxf gcc-4.8.5.tar.bz2
   $ cd gcc-4.8.5
   $ export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/gcc/lib:$LD_LIBRARY_PATH
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc --with-mpc=/home/gpadmin/BuildEnv/gcc
+  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc --with-mpc=/home/gpadmin/BuildEnv/gcc --disable-multilib
   $ make && make install
   
   $ vi ~/.bashrc
@@ -114,7 +114,7 @@ $ make && make install
 
 $ vi ~/.bashrc
 export LD_LIBRARY_PATH=/home/gpadmin/BuileEnv/cmake/lib:$LD_LIBRARY_PATH
-exprot PATH=/home/gpadmin/BuildEnv/cmake/bin:$PATH
+export PATH=/home/gpadmin/BuildEnv/cmake/bin:$PATH
 $ source ~/.bashrc
 ```
 
@@ -132,7 +132,7 @@ greeplum要求python 2.7以上，系统自带或yum安装的python是2.6，需�
   $ make && make install
   
   $ vi ~/.bashrc
-  export LD_LIBRARY_PATH=/home/gpadmin/BuileEnv/python/lib:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/python/lib:$LD_LIBRARY_PATH
   export PATH=/home/gpadmin/BuildEnv/python/bin:$PATH
   $ source ~/.bashrc
   ```
@@ -158,7 +158,7 @@ $ mkdir -p /home/gpadmin/BuildEnv/ninja/bin
 $ unzip -d /home/gpadmin/BuildEnv/ninja/bin ninja-linux.zip
 
 $ vi ~/.bashrc
-$ exprot PATH=/home/gpadmin/BuildEnv/ninja/bin:$PATH
+$ export PATH=/home/gpadmin/BuildEnv/ninja/bin:$PATH
 $ source ~/.bashrc
 ```
 
@@ -192,7 +192,7 @@ $ source ~/.bashrc
 # 编译gpdb
 
 ```shell
-$ git clone -b 5X_STABLE git://github.com/greenplum-db/gpdb.git
+$ git clone git://github.com/greenplum-db/gpdb.git
 $ cd gpdb
 $ export LIBRARY_PATH=/home/gpadmin/gporca/lib:$LIBRARY_PATH
 $ export C_INCLUDE_PATH=/home/gpadmin/gporca/include:$C_INCLUDE_PATH
@@ -209,7 +209,7 @@ $ make && make install
 $ wget http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
 $ tar xjf geos-3.4.2.tar.bz2
 $ cd geos-3.4.2
-$ ./configure --prefix=/home/yuzhang/opt/geos
+$ ./configure --prefix=/home/gpadmin/BuildEnv/geos
 $ make && make install
 ```
 
@@ -219,7 +219,7 @@ $ make && make install
 $ wget http://download.osgeo.org/proj/proj-4.9.1.tar.gz
 $ tar xzf proj-4.9.1.tar.gz
 $ cd proj-4.9.1
-$ ./configure --prefix=/home/yuzhang/opt/proj
+$ ./configure --prefix=/home/gpadmin/BuildEnv/proj
 $ make && make install
 ```
 
@@ -229,11 +229,12 @@ $ make && make install
 $ wget http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
 $ tar xzf gdal-1.11.2.tar.gz
 $ cd gdal-1.11.2
-$ ./configure --prefix=/home/yuzhang/opt/gdal
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gdal
 $ make && make install
 
 $ vi ~/.bashrc
-export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/geos/lib:/home/gpadmin/BuildEnv/proj/lib:/home/pgadmin/BuildEnv/gdal/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/geos/lib:/home/gpadmin/BuildEnv/proj/lib:/home/gpadmin/BuildEnv/gdal/lib:$LD_LIBRARY_PATH
+export PATH=/home/gpadmin/BuildEnv/geos/bin:/home/gpadmin/BuildEnv/proj/bin:/home/gpadmin/BuildEnv/gdal/bin:$PATH
 $ source ~/.bashrc
 ```
 
@@ -283,7 +284,7 @@ $ source ~/.bashrc
 ## pgbouncer
 
 ```shell
-$git clone -b pgbouncer_1_8_1 git://github.com/greenplum-db/pgbouncer.git
+$ git clone -b pgbouncer_1_8_1 git://github.com/greenplum-db/pgbouncer.git
 $ cd pgbouncer
 $ git submodule init
 $ git submodule update
@@ -307,9 +308,9 @@ $ sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel
 ## Apache Maven
 
 ```shell
-$ wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz
-$ tar -zxf apache-maven-3.5.3-bin.tar.gz -C /home/gpadmin/BuildEnv/
-$ mv /home/gpadmin/BuildEnv/apache-maven-3.5.3 /home/gpadmin/BuildEnv/apache-maven
+$ wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+$ tar -zxf apache-maven-3.5.4-bin.tar.gz -C /home/gpadmin/BuildEnv/
+$ mv /home/gpadmin/BuildEnv/apache-maven-3.5.4 /home/gpadmin/BuildEnv/apache-maven
 
 $ vi ~/.bashrc
 export PATH=/home/gpadmin/BuildEnv/apache-maven/bin:$PATH
