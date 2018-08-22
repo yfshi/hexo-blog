@@ -1,10 +1,10 @@
 ---
 layout: _post
-title: GreenPlum编译
+title: Greenplum编译
 date: 2018-07-10 19:34:45
 tags:
 - PostgreSQL
-- GreenPlum
+- Greenplum
 categories: Database
 ---
 
@@ -51,7 +51,7 @@ $ sudo yum install -y flex bison zlib-devel readline-devel bzip2-devel openldap-
 
 ## gcc
 
-greenplum要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自带或yum安装的gcc版本是4.4.7，需要编译更高版本的gcc。
+Greenplum要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自带或yum安装的gcc版本是4.4.7，需要编译更高版本的gcc。
 
 编译gcc需要先编译gmp、mpfr、mpc，按照顺序编译安装。
 
@@ -167,7 +167,7 @@ $ source ~/.bashrc
 ## gp-xerces
 
 ```shell
-$ git clone git://github.com/greenplum-db/gp-xerces.git
+$ git clone git://github.com/Greenplum-db/gp-xerces.git
 $ cd gp-xerces/
 $ mkdir build
 $ cd build
@@ -178,7 +178,7 @@ $ make && make install
 ## gporca
 
 ```shell
-$ git clone git://github.com/greenplum-db/gporca.git
+$ git clone git://github.com/Greenplum-db/gporca.git
 $ cd gporca
 $ cmake -GNinja -D CMAKE_INSTALL_PREFIX=/home/gpadmin/gporca -D XERCES_LIBRARY=/home/gpadmin/gporca/lib/libxerces-c.so -D XERCES_INCLUDE_DIR=/home/gpadmin/gporca/include -H. -Bbuild
 $ ninja install -C build
@@ -192,7 +192,7 @@ $ source ~/.bashrc
 # 编译gpdb
 
 ```shell
-$ git clone git://github.com/greenplum-db/gpdb.git
+$ git clone git://github.com/Greenplum-db/gpdb.git
 $ cd gpdb
 $ export LIBRARY_PATH=/home/gpadmin/gporca/lib:$LIBRARY_PATH
 $ export C_INCLUDE_PATH=/home/gpadmin/gporca/include:$C_INCLUDE_PATH
@@ -241,8 +241,8 @@ $ source ~/.bashrc
 ## postgis
 
 ```shell
-$ git clone git://github.com/greenplum-db/geospatial.git
-$ source /home/gpadmin/gpdb/greenplum_path.sh
+$ git clone git://github.com/Greenplum-db/geospatial.git
+$ source /home/gpadmin/gpdb/Greenplum_path.sh
 $ cd geospatial/postgis/build/postgis-2.1.5/
 $ ./configure --prefix=$GPHOME --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --with-projdir=/home/gpadmin/BuildEnv/proj
 $ make USE_PGXS=1 clean all install
@@ -254,7 +254,7 @@ $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/rtpostgis.s
 $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/raster_comments.sql
 $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/spatial_ref_sys.sql
 
-$ vi $GPHOME/greenplum_path.sh
+$ vi $GPHOME/Greenplum_path.sh
 export GDAL_DATA=$GPHOME/share/gdal
 export POSTGIS_ENABLE_OUTDB_RASTERS=0
 export POSTGIS_GDAL_ENABLED_DRIVERS=DISABLE_ALL
@@ -284,7 +284,7 @@ $ source ~/.bashrc
 ## pgbouncer
 
 ```shell
-$ git clone -b pgbouncer_1_8_1 git://github.com/greenplum-db/pgbouncer.git
+$ git clone -b pgbouncer_1_8_1 git://github.com/Greenplum-db/pgbouncer.git
 $ cd pgbouncer
 $ git submodule init
 $ git submodule update
@@ -368,7 +368,7 @@ Password = 111111
 Port = 5432
 ReadOnly = 0
 
-$ source /home/gpadmin/gpdb/greenplum_path.sh
+$ source /home/gpadmin/gpdb/Greenplum_path.sh
 $ isql gp
 ```
 
