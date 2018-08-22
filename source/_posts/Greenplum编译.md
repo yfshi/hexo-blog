@@ -51,7 +51,7 @@ $ sudo yum install -y flex bison zlib-devel readline-devel bzip2-devel openldap-
 
 ## gcc
 
-Greenplum要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自带或yum安装的gcc版本是4.4.7，需要编译更高版本的gcc。
+Greenplum较新的代码要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自带或yum安装的gcc版本是4.4.7，需要编译更高版本的gcc。
 
 编译gcc需要先编译gmp、mpfr、mpc，按照顺序编译安装。
 

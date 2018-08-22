@@ -22,7 +22,7 @@ categories: Database
 
 本章所有操作在所有节点使用root用户执行
 
-## 基本环境
+## 开发环境
 
 当前系统如下：
 
@@ -48,7 +48,9 @@ $ yum install -y flex bison gettext-devel readline-devel zlib-devel libcom_err-d
 $ yum install -y libxml2-devel libcurl-devel bzip2-devel python-devel
 ```
 
-基本设置：
+注意：如果Greenplum版本较新，CentOS 6.4官方的开发包和工具版本可能无法满足Greenplum（比如glibc不支持C11标准，python版本较低、cmake版本较低等）。此时，可以参考另一篇日志[Greenplun编译](http://yfshi.github.io/2018/07/10/Greenplum编译/).
+
+## 系统设置
 
 ```shell
 # 关闭防火墙
