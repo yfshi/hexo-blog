@@ -66,3 +66,11 @@ yum groupinstall -y xxx
 yum ungroup xxx
 yum makecache
 ```
+
+# Q&A
+
+## 升级python导致yum不可用
+
+`/usr/bin/yum`第一行指定该脚本所使用的python版本，一般是`#!/usr/bin/python`，python升级之后`/usr/bin/python`是升级之后的python，和`/usr/bin/yum`不兼容。
+
+可以修改`/usr/bin/yum`第一行为原来的python版本，比如`#!/usr/bin/python2.6`
