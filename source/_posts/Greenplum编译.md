@@ -239,6 +239,7 @@ $ source ~/.bashrc
 ```
 
 ## postgis
+> PostGIS 2.1.5 for GreenPlum 5.x+ 
 
 ```shell
 $ git clone git://github.com/Greenplum-db/geospatial.git
