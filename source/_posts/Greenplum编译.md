@@ -242,7 +242,7 @@ $ source ~/.bashrc
 
 ```shell
 $ git clone git://github.com/Greenplum-db/geospatial.git
-$ source /home/gpadmin/gpdb/Greenplum_path.sh
+$ source /home/gpadmin/gpdb/greenplum_path.sh
 $ cd geospatial/postgis/build/postgis-2.1.5/
 $ ./configure --prefix=$GPHOME --with-pgconfig=$GPHOME/bin/pg_config --with-raster --without-topology --with-projdir=/home/gpadmin/BuildEnv/proj
 $ make USE_PGXS=1 clean all install
@@ -254,7 +254,7 @@ $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/rtpostgis.s
 $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/raster_comments.sql
 $ psql -d postgres -f ${GPHOME}/share/postgresql/contrib/postgis-2.1/spatial_ref_sys.sql
 
-$ vi $GPHOME/Greenplum_path.sh
+$ vi $GPHOME/greenplum_path.sh
 export GDAL_DATA=$GPHOME/share/gdal
 export POSTGIS_ENABLE_OUTDB_RASTERS=0
 export POSTGIS_GDAL_ENABLED_DRIVERS=DISABLE_ALL
@@ -368,7 +368,7 @@ Password = 111111
 Port = 5432
 ReadOnly = 0
 
-$ source /home/gpadmin/gpdb/Greenplum_path.sh
+$ source /home/gpadmin/gpdb/greenplum_path.sh
 $ isql gp
 ```
 
