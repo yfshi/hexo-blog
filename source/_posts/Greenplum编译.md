@@ -10,7 +10,7 @@ categories: Database
 
 操作系统是centos6.4 x64最小安装。
 开发环境搭建方法：使用官方yum源，如果yum安装的包版本不符合或者不在yum源中，通过源码编译的方式安装。
-> 如果操作系统版本>=7.0，可以选择使用README.md中的方式。
+> 也可以考虑通过搭建第三方yum源安装合适的软件包
 
 # 搭建基本环境
 
@@ -32,7 +32,7 @@ $ sudo yum install -y vim wget zip unzip bzip2 git net-tools sysstat man gcc gcc
 ## 安装开发包
 
 ```shell
-$ sudo yum install -y flex bison zlib-devel readline-devel bzip2-devel openldap-devel libxml2-devel openssl-devel libxslt-devel libevent-devel libcurl-devel perl perl-devel perl-ExtUtils* apr-util-devel apr-devel libyaml-devel json-c-devel c-ares-devel pam-devel libyaml-devel
+$ sudo yum install -y apr-devel bison bzip2-devel flex gcc gcc-c++ krb5-devel libcurl-devel libkadm5 libyaml-devel libxml2-devel openssl-devel perl-ExtUtils-Embed readline-devel xerces-c-devel zlib-devel
 ```
 
 ## gcc
