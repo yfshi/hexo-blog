@@ -70,6 +70,7 @@ CentOS6/7安装命令如下：
 
 ```shell
 yum install -y epel-release
+yum --disablerepo=epel -y update ca-certificates
 ```
 
 安装 EPEL 里的软件就不用麻烦 `enable` 脚本了，直接像平常一样用。你还可以用 `--disablerepo` 和 `--enablerepo` 选项指定从 EPEL 里安装软件包：
