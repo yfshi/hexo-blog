@@ -35,20 +35,7 @@ $ uname -a
 Linux vm 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-安装开发包：
-
-```shell
-# linux基本环境
-$ yum install -y vim net-tools wget lrzsz bzip2 git sysstat man gcc gcc-c++ make gdb zip unzip
-
-# postgres开发环境
-$ yum install -y flex bison gettext-devel readline-devel zlib-devel libcom_err-devel krb5-devel openssl-devel openldap-devel java-1.7.0-openjdk-devel unixODBC-devel libuuid-devel libtool
-
-# Greenplum开发环境
-$ yum install -y libxml2-devel libcurl-devel bzip2-devel python-devel
-```
-
-注意：如果Greenplum版本较新，CentOS 6.4官方的开发包和工具版本可能无法满足Greenplum（比如glibc不支持C11标准，python版本较低、cmake版本较低等）。此时，可以参考另一篇日志[Greenplun编译](http://yfshi.github.io/2018/07/10/Greenplum编译/).
+搭建基本环境: 参考[Greenplun编译](http://yfshi.github.io/2018/07/10/Greenplum编译/)
 
 ## 系统设置
 

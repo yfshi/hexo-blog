@@ -23,19 +23,20 @@ $ passwd gpadmin
 
 把gpadmin加入sudoer，之后的操作都在gpadmin用户下完成。
 
-## 安装工具
+## 安装linux基本环境
 
 ```shell
-$ sudo yum install -y vim wget zip unzip bzip2 git net-tools sysstat man gcc gcc-c++ make gdb libtool
+$ sudo yum install -y bzip2 cmake gcc gcc-c++ gdb git libtool lrzsz make man net-tools sysstat unzip vim wget zip
 ```
 
-## 安装开发包
+## 安装开发环境
 
 ```shell
-$ sudo yum install -y apr-devel bison bzip2-devel flex gcc gcc-c++ krb5-devel libcurl-devel libkadm5 libyaml-devel libxml2-devel openssl-devel perl-ExtUtils-Embed readline-devel xerces-c-devel zlib-devel
+$ sudo yum install -y apr-devel apr-util-devel bison bzip2-devel c-ares-devel flex json-c-devel krb5-devel libcurl-devel libevent-devel libkadm5 libxml2-devel libxslt-devel libyaml-devel openldap-devel openssl-devel pam-devel perl perl-devel perl-ExtUtils-Embed readline-devel zlib-devel
 ```
+注意：如果Greenplum版本较新(>=5X_STABLE)，CentOS 6.4官方的开发包版本可能无法满足Greenplum（比如glibc不支持C11标准，python版本较低、cmake版本较低等）,也可能会缺少一些包。可以通过源码编译的方式安装合适的版本，如下。
 
-## gcc
+## gcc-4.8.5
 
 Greenplum较新的代码要用到C11/C++11标准，要求gcc版本4.7以上。由于系统自带或yum安装的gcc版本是4.4.7，需要编译更高版本的gcc。
 
@@ -87,7 +88,7 @@ Greenplum较新的代码要用到C11/C++11标准，要求gcc版本4.7以上。�
   $ source ~/.bashrc
   ```
 
-## cmake
+## cmake3
 
 gporca要求cmake版本3.1以上，系统自带或者yum安装的cmake是cmake-2.8，需要编译更高版本cmake。
 
@@ -104,7 +105,7 @@ export PATH=/home/gpadmin/BuildEnv/cmake/bin:$PATH
 $ source ~/.bashrc
 ```
 
-## python
+## python-2.7
 
 greeplum要求python 2.7以上，系统自带或yum安装的python是2.6，需要编译新版本。
 
@@ -136,7 +137,7 @@ greeplum要求python 2.7以上，系统自带或yum安装的python是2.6，需�
   $ pip install psutil lockfile paramiko setuptools
   ```
 
-## 安装ninja
+## ninja
 
 ```shell
 $ wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
