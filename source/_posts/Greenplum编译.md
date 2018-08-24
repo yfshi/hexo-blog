@@ -8,13 +8,9 @@ tags:
 categories: Database
 ---
 
-操作系统是centos6.4 x64最小安装。
-开发环境搭建方法：使用官方yum源，如果yum安装的包版本不符合或者不在yum源中，通过源码编译的方式安装。
-> 也可以考虑通过搭建第三方yum源安装合适的软件包
+> 操作系统：centos6.4 x64最小安装
 
-# 搭建基本环境
-
-## 添加用户
+# 添加用户
 
 ```shell
 $ useradd gpadmin
@@ -23,18 +19,23 @@ $ passwd gpadmin
 
 把gpadmin加入sudoer，之后的操作都在gpadmin用户下完成。
 
-## 安装linux基本环境
+# 搭建开发环境
 
 ```shell
+# linux基本环境
 $ sudo yum install -y bzip2 cmake gcc gcc-c++ gdb git libtool lrzsz make man net-tools sysstat unzip vim wget zip
+
+# 数据库开发环境
+$ sudo yum install -y apr-devel apr-util-devel bison bzip2-devel c-ares-devel flex java-1.8.0-openjdk java-1.8.0-openjdk-devel json-c-devel krb5-devel libcurl-devel libevent-devel libkadm5 libxml2-devel libxslt-devel libyaml-devel openldap-devel openssl-devel pam-devel perl perl-devel perl-ExtUtils-Embed readline-devel unixODBC-devel zlib-devel
 ```
 
-## 安装开发环境
+一般来说，上面安装的开发包足够一般的数据库编译或安装使用了。
 
-```shell
-$ sudo yum install -y apr-devel apr-util-devel bison bzip2-devel c-ares-devel flex json-c-devel krb5-devel libcurl-devel libevent-devel libkadm5 libxml2-devel libxslt-devel libyaml-devel openldap-devel openssl-devel pam-devel perl perl-devel perl-ExtUtils-Embed readline-devel zlib-devel
-```
-注意：如果Greenplum版本较新(>=5X_STABLE)，CentOS 6.4官方的开发包版本可能无法满足Greenplum（比如glibc不支持C11标准，python版本较低、cmake版本较低等）,也可能会缺少一些包。可以通过源码编译的方式安装合适的版本，如下。
+> 如果Greenplum版本较新(>=5X_STABLE)，CentOS 6.4官方的开发包版本可能无法满足Greenplum（比如glibc不支持C11标准，python版本较低、cmake版本较低等）,也可能会缺少一些其他的包。
+>
+> 可以通过源码编译或者非官方yum源安装合适的版本。
+
+# 编译开发包
 
 ## gcc-4.8.5
 
@@ -42,51 +43,42 @@ Greenplum较新的代码要用到C11/C++11标准，要求gcc版本4.7以上。�
 
 编译gcc需要先编译gmp、mpfr、mpc，按照顺序编译安装。
 
-- gmp
+```shell
+# 编译gmp
+$ wget https://gmplib.org/download/gmp/gmp-6.1.0.tar.bz2
+$ tar -jxf gmp-6.1.0.tar.bz2
+$ cd gmp-6.1.0
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gcc
+$ make && make install
 
-  ```shell
-  $ wget https://gmplib.org/download/gmp/gmp-6.1.0.tar.bz2
-  $ tar -jxf gmp-6.1.0.tar.bz2
-  $ cd gmp-6.1.0
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc
-  $ make && make install
-  ```
+# 编译mpfr
+$ wget https://www.mpfr.org/mpfr-3.1.4/mpfr-3.1.4.tar.bz2
+$ tar -jxf mpfr-3.1.4.tar.bz2
+$ cd mpfr-3.1.4
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc
+make && make install
 
-- mpfr
+# 编译mpc
+$ wget https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+$ tar -zxf mpc-1.0.3.tar.gz
+$ cd mpc-1.0.3
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc
+$ make && make install
 
-  ```shell
-  $ wget https://www.mpfr.org/mpfr-3.1.4/mpfr-3.1.4.tar.bz2
-  $ tar -jxf mpfr-3.1.4.tar.bz2
-  $ cd mpfr-3.1.4
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc
-  make && make install
-  ```
+# 编译gcc
+$ wget ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.5/gcc-4.8.5.tar.bz2
+$ tar -jxf gcc-4.8.5.tar.bz2
+$ cd gcc-4.8.5
+$ export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/gcc/lib:$LD_LIBRARY_PATH
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc --with-mpc=/home/gpadmin/BuildEnv/gcc --disable-multilib
+$ make && make install
 
-- mpc
-
-  ```shell
-  $ wget https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
-  $ tar -zxf mpc-1.0.3.tar.gz
-  $ cd mpc-1.0.3
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc
-  $ make && make install
-  ```
-
-- gcc
-
-  ```shell
-  $ wget ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.8.5/gcc-4.8.5.tar.bz2
-  $ tar -jxf gcc-4.8.5.tar.bz2
-  $ cd gcc-4.8.5
-  $ export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/gcc/lib:$LD_LIBRARY_PATH
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/gcc --with-gmp=/home/gpadmin/BuildEnv/gcc --with-mpfr=/home/gpadmin/BuildEnv/gcc --with-mpc=/home/gpadmin/BuildEnv/gcc --disable-multilib
-  $ make && make install
-  
-  $ vi ~/.bashrc
-  export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/gcc/lib:/home/gpadmin/BuildEnv/gcc/lib64:$LD_LIBRARY_PATH
-  export PATH=/home/gpadmin/BuildEnv/gcc/bin:$PATH
-  $ source ~/.bashrc
-  ```
+# 设置环境变量
+$ vi ~/.bashrc
+export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/gcc/lib:/home/gpadmin/BuildEnv/gcc/lib64:$LD_LIBRARY_PATH
+export PATH=/home/gpadmin/BuildEnv/gcc/bin:$PATH
+$ source ~/.bashrc
+```
 
 ## cmake3
 
@@ -109,33 +101,27 @@ $ source ~/.bashrc
 
 greeplum要求python 2.7以上，系统自带或yum安装的python是2.6，需要编译新版本。
 
-- python
+```shell
+# 编译python
+$ wget https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
+$ tar -xf Python-2.7.14.tgz
+$ cd Python-2.7.14
+$ ./configure --prefix=/home/gpadmin/BuildEnv/python --enable-optimizations -enable-shared CFLAGS=-fPIC
+$ make && make install
 
-  ```shell
-  $ wget https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
-  $ tar -xf Python-2.7.14.tgz
-  $ cd Python-2.7.14
-  $ ./configure --prefix=/home/gpadmin/BuildEnv/python --enable-optimizations -enable-shared CFLAGS=-fPIC
-  $ make && make install
-  
-  $ vi ~/.bashrc
-  export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/python/lib:$LD_LIBRARY_PATH
-  export PATH=/home/gpadmin/BuildEnv/python/bin:$PATH
-  $ source ~/.bashrc
-  ```
+# 设置环境变量
+$ vi ~/.bashrc
+export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/python/lib:$LD_LIBRARY_PATH
+export PATH=/home/gpadmin/BuildEnv/python/bin:$PATH
+$ source ~/.bashrc
 
-- pip
+# 安装pip
+$ python -m ensurepip
+$ pip install --upgrade pip
 
-  ```shell
-  $ python -m ensurepip
-  $ pip install --upgrade pip
-  ```
-
-- 安装python模块
-
-  ```shell
-  $ pip install psutil lockfile paramiko setuptools
-  ```
+# 安装python模块
+$ pip install psutil lockfile paramiko setuptools
+```
 
 ## ninja
 
@@ -149,22 +135,76 @@ $ export PATH=/home/gpadmin/BuildEnv/ninja/bin:$PATH
 $ source ~/.bashrc
 ```
 
-# 编译gporca
-
-## gp-xerces
+## geos+proj+gdal
 
 ```shell
+# geos
+$ wget http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
+$ tar xjf geos-3.4.2.tar.bz2
+$ cd geos-3.4.2
+$ ./configure --prefix=/home/gpadmin/BuildEnv/geos
+$ make && make install
+
+# proj
+$ wget http://download.osgeo.org/proj/proj-4.9.1.tar.gz
+$ tar xzf proj-4.9.1.tar.gz
+$ cd proj-4.9.1
+$ ./configure --prefix=/home/gpadmin/BuildEnv/proj
+$ make && make install
+
+# gdal
+$ wget http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
+$ tar xzf gdal-1.11.2.tar.gz
+$ cd gdal-1.11.2
+$ ./configure --prefix=/home/gpadmin/BuildEnv/gdal
+$ make && make install
+
+# 设置环境变量
+$ vi ~/.bashrc
+export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/geos/lib:/home/gpadmin/BuildEnv/proj/lib:/home/gpadmin/BuildEnv/gdal/lib:$LD_LIBRARY_PATH
+export PATH=/home/gpadmin/BuildEnv/geos/bin:/home/gpadmin/BuildEnv/proj/bin:/home/gpadmin/BuildEnv/gdal/bin:$PATH
+$ source ~/.bashrc
+```
+
+## libevent
+
+```shell
+$ wget https://github.com/downloads/libevent/libevent/libevent-2.0.20-stable.tar.gz
+$ tar xf libevent-2.0.20-stable.tar.gz
+$ cd libevent-2.0.20-stable
+$ ./configure --prefix=/home/gpadmin/BuildEnv/libevent
+$ make && make install
+
+$ vi ~/.bashrc
+export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/libevent/lib:$LD_LIBRARY_PATH
+export PATH=/home/gpadmin/BuildEnv/libevent/bin:$PATH
+$ source ~/.bashrc
+```
+
+## Apache Maven
+
+```shell
+$ wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+$ tar -zxf apache-maven-3.5.4-bin.tar.gz -C /home/gpadmin/BuildEnv/
+$ mv /home/gpadmin/BuildEnv/apache-maven-3.5.4 /home/gpadmin/BuildEnv/apache-maven
+
+$ vi ~/.bashrc
+export PATH=/home/gpadmin/BuildEnv/apache-maven/bin:$PATH
+$ souce ~/.bashrc
+```
+
+# 编译gporca
+
+```shell
+# gp-xerces
 $ git clone git://github.com/Greenplum-db/gp-xerces.git
 $ cd gp-xerces/
 $ mkdir build
 $ cd build
 $ ../configure --prefix=/home/gpadmin/gporca
 $ make && make install
-```
 
-## gporca
-
-```shell
+# gporca
 $ git clone git://github.com/Greenplum-db/gporca.git
 $ cd gporca
 $ cmake -GNinja -D CMAKE_INSTALL_PREFIX=/home/gpadmin/gporca -D XERCES_LIBRARY=/home/gpadmin/gporca/lib/libxerces-c.so -D XERCES_INCLUDE_DIR=/home/gpadmin/gporca/include -H. -Bbuild
@@ -190,42 +230,6 @@ $ make && make install
 
 # 编译postgis
 
-## geos
-
-```shell
-$ wget http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
-$ tar xjf geos-3.4.2.tar.bz2
-$ cd geos-3.4.2
-$ ./configure --prefix=/home/gpadmin/BuildEnv/geos
-$ make && make install
-```
-
-## proj
-
-```shell
-$ wget http://download.osgeo.org/proj/proj-4.9.1.tar.gz
-$ tar xzf proj-4.9.1.tar.gz
-$ cd proj-4.9.1
-$ ./configure --prefix=/home/gpadmin/BuildEnv/proj
-$ make && make install
-```
-
-## gdal
-
-```shell
-$ wget http://download.osgeo.org/gdal/1.11.2/gdal-1.11.2.tar.gz
-$ tar xzf gdal-1.11.2.tar.gz
-$ cd gdal-1.11.2
-$ ./configure --prefix=/home/gpadmin/BuildEnv/gdal
-$ make && make install
-
-$ vi ~/.bashrc
-export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/geos/lib:/home/gpadmin/BuildEnv/proj/lib:/home/gpadmin/BuildEnv/gdal/lib:$LD_LIBRARY_PATH
-export PATH=/home/gpadmin/BuildEnv/geos/bin:/home/gpadmin/BuildEnv/proj/bin:/home/gpadmin/BuildEnv/gdal/bin:$PATH
-$ source ~/.bashrc
-```
-
-## postgis
 > PostGIS 2.1.5 for GreenPlum 5.x+ 
 
 ```shell
@@ -252,25 +256,6 @@ $ gpstop –r	//重启数据库
 
 # 编译pgbouncer
 
-pgbouncer要求libevent 2.0以上，系统自带或yum安装的libevent是1.4，需要编译新版本
-
-## libevent
-
-```shell
-$ wget https://github.com/downloads/libevent/libevent/libevent-2.0.20-stable.tar.gz
-$ tar xf libevent-2.0.20-stable.tar.gz
-$ cd libevent-2.0.20-stable
-$ ./configure --prefix=/home/gpadmin/BuildEnv/libevent
-$ make && make install
-
-$ vi ~/.bashrc
-export LD_LIBRARY_PATH=/home/gpadmin/BuildEnv/libevent/lib:$LD_LIBRARY_PATH
-export PATH=/home/gpadmin/BuildEnv/libevent/bin:$PATH
-$ source ~/.bashrc
-```
-
-## pgbouncer
-
 ```shell
 $ git clone -b pgbouncer_1_8_1 git://github.com/Greenplum-db/pgbouncer.git
 $ cd pgbouncer
@@ -287,26 +272,6 @@ $ source ~/.bashrc
 
 # 编译jdbc
 
-## jdk
-
-```shell
-$ sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel
-```
-
-## Apache Maven
-
-```shell
-$ wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
-$ tar -zxf apache-maven-3.5.4-bin.tar.gz -C /home/gpadmin/BuildEnv/
-$ mv /home/gpadmin/BuildEnv/apache-maven-3.5.4 /home/gpadmin/BuildEnv/apache-maven
-
-$ vi ~/.bashrc
-export PATH=/home/gpadmin/BuildEnv/apache-maven/bin:$PATH
-$ souce ~/.bashrc
-```
-
-## jdbc
-
 ```shell
 $ wget https://jdbc.postgresql.org/download/postgresql-jdbc-42.2.2.src.tar.gz --no-check-certificate
 $ tar -zxf postgresql-jdbc-42.2.2.src.tar.gz
@@ -317,14 +282,6 @@ $ cp target/postgresql-42.2.2.jar /home/gpadmin/gpdb/lib
 
 # 编译odbc
 
-## unixodbc
-
-```shell
-$ sudo yum install -y unixODBC-devel
-```
-
-## odbc
-
 ```shell
 $ wget https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-09.03.0400.tar.gz --no-check-certificate
 $ tar -xf psqlodbc-09.03.0400.tar.gz
@@ -333,7 +290,7 @@ $ ./configure --prefix=/home/gpadmin/psqlodbc
 $ make && make install
 ```
 
-## 测试
+测试：
 
 ```shell
 $ sudo vi /etc/odbcinst.ini

@@ -1,7 +1,7 @@
 ---
 layout: _post
 title: Greenplum安装
-date: 2018-08-21 13:57:23
+date: 2018-07-10 19:40:00
 tags:
 - PostgreSQL
 - Greenplum
@@ -35,7 +35,17 @@ $ uname -a
 Linux vm 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-搭建基本环境: 参考[Greenplun编译](http://yfshi.github.io/2018/07/10/Greenplum编译/)
+搭建基本环境：
+
+```shell
+# linux基本环境
+$ yum install -y bzip2 cmake gcc gcc-c++ gdb git libtool lrzsz make man net-tools sysstat unzip vim wget zip
+
+# 数据库开发环境
+$ yum install -y apr-devel apr-util-devel bison bzip2-devel c-ares-devel flex java-1.8.0-openjdk java-1.8.0-openjdk-devel json-c-devel krb5-devel libcurl-devel libevent-devel libkadm5 libxml2-devel libxslt-devel libyaml-devel openldap-devel openssl-devel pam-devel perl perl-devel perl-ExtUtils-Embed readline-devel unixODBC-devel zlib-devel
+```
+
+如果上述环境无法满足要求，参考[Greenplun编译](../Greenplum编译/)
 
 ## 系统设置
 
@@ -65,16 +75,7 @@ NETWORKING=yes
 HOSTNAME=gp
 ```
 
-## 添加用户
-
-```shell
-$ useadd gpadmin
-$ passwd gpadmin
-$ vi /etc/sudoers
-gpadmin ALL=(ALL) NOPASSWD: ALL
-```
-
-## 系统参数
+## 系统参数配置
 
 ```shell
 $ cat >> /etc/sysctl.conf <<-EOF
@@ -132,7 +133,16 @@ EOF
 
 # 安装Greenplum
 
-本章所有操作都在主节点的gpadmin用户下
+## 添加用户
+
+```shell
+$ useadd gpadmin
+$ passwd gpadmin
+$ vi /etc/sudoers
+gpadmin ALL=(ALL) NOPASSWD: ALL
+```
+
+以下操作都在主节点的gpadmin用户下进行
 
 ## 创建节点文件
 
