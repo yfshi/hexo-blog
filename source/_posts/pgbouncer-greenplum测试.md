@@ -115,7 +115,7 @@ categories: Database
 
 ```shell
 $ createdb -p65432 pgbench             # 创建pgbench库
-$ pgbouncer -d pgbouncer.ini pgbench
+$ pgbouncer -d pgbouncer.ini
 ```
 
 ## 测试
