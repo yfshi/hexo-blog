@@ -114,64 +114,6 @@ categories: Database
   "yfshi" "111111"
   ```
 
-下面列出一些pgbouncer配置项
-
-
-| 配置项                    | 解释                                                         |
-| ------------------------- | ------------------------------------------------------------ |
-| logfile                   | 指定日志文件                                                 |
-| pidfile                   | 指定pidfile,文件中记录了pgbouncer的进程ID,如果是加-d启动则此项是必须配置,如果未配置启动报错 |
-| listen_addr               | 监听的IP地址                                                 |
-| listen_addr               | 监听的IP端口                                                 |
-| unix_socket_dir           | 指定unix socket的文件目录,默认是/tmp                         |
-| unix_socket_mode          | 指定unix socket文件属性,默认 0777                            |
-| unix_socket_group         | 指定unix socket文件的组,默认没有设置                         |
-| auth_file                 | 指定连接pgbouncer的用户名和密码认证文件                      |
-| auth_type                 | 认证方法,可设置为any, trust, plain, crypt, md5               |
-| pool_mode                 | 连接池模式,可为session, transaction, statement               |
-| max_client_conn           | 准许连接到pgbouncer上最大客户端数                            |
-| default_pool_size         | 连接池与数据库默认大小,不同的用户或者数据库会有不同的连接池  |
-| min_pool_size             | 连接池最小大小,即每个连接池和数据库保持的连接数              |
-| reserve_pool_size         | 连接池保留连接数                                             |
-| reserve_pool_timeout      | 保留连接的超时时间                                           |
-| server_round_robin        | 负载均衡模式是否为 round robin,默认是关闭,采用LIFO(后进先出) |
-| ignore_startup_parameters | 默认pgbouncer会跟踪一些数据库参数,如client_encoding,datestyle,timezone,standard_conforming_strings,application_name等,pgbouncer能检车出这几个参数的变化并与客户端保持一致,所以默认情况下设置其他参数会导致pgbouncer抛出错误.设置此项,指定一些数据库参数,pgbouncer就可以忽略对这些参数的检查,不同参数之间用逗号隔开 |
-| disable_pqexec            | 是否禁止简单查询协议,默认是为0禁止.简单查询协议准许一个请求发送多条SQL,容易导致SQL注入攻击 |
-| syslog                    | 是否打开syslog,window下没有syslog,则使用eventlog.默认为0,表示不打开 |
-| syslog_facility           | 可配置为auth, authpriv, daemon, user, local0-7默认是daemon   |
-| syslog_ident              | 以什么名称发送日志到syslog,默认是pgbouncer                   |
-| log_connections           | 是否记录连接成功的日志,默认值是1,记录                        |
-| log_disconnections        | 是否记录断开连接的日志, 默认值是1,记录                       |
-| log_pooler_errors         | 连接池发往客户端的错误是否记录在日志中,默认值是1,记录        |
-| stats_period              | 将汇总的统计信息写入日志的时间周期,默认60                    |
-| verbose                   | 日志记录的详细程度,在启动命令行中 –v –v 与verbose=2是同样的含义 |
-| admin_users               | 准许在console端执行一些管理命令的用户列表,多个用户之间以逗号隔开.当设置auth_mod=any时,此配置可忽略,默认为空. |
-| stats_users               | 准许连接到console上查看连接池只读信息的用户列表.这些用户可以执行除show fds命令之外的其他show命令. |
-| server_reset_query        | 当一个后端数据库连接会话被某一个客户端使用时,它的属性可能会改变,所以当这个后端数据端连接呗第二个客户端使用时,就可能会产生问题.因此一个连接被使用后重新放回连接池时,需要对这个连接的属性进行复位.默认设置为DISCARD ALL.需要注意在连接池为事务模式是,此配置项应该为空,因为在事务模式下,客户端不应该设置连接会话的属性 |
-| server_check_delay        | 空闲连接需要多长时间进行一次健康检查,查看其是否可用.如果设置为0则立即检查,默认设置为30s |
-| server_check_query        | 健康检查的SQL,如果为空则禁止健康检查.默认为SELECT 1          |
-| server_lifetime           | 连接存活时间.当一个连接存活时间超过此值时,就会被关闭,然后新建一个连接.默认为3600s,模板配置文件中是1200s与默认值有冲突.如果设置为0,表示此连接只是用一次,使用后就关闭 |
-| server_idle_timeout       | 连接池中连接的idle时间,超过此时间,连接会被关闭,默认值为600s  |
-| server_connect_timeout    | 到后端数据库的login时间超过此值后,连接就会被关闭.默认为15s   |
-| server_login_retry        | 指定创建到后端数据库连接失败后,等待多长时间重试,默认值为15s  |
-| client_login_timeout      | 客户端与pgbouncer建立连接后,如果无法再这段时间内完成登录,那么连接将会被断开.默认为60s |
-| autodb_idle_timeout       | 如果自动创建的数据库池已经使用用了这个时间值,那么他们会被释放,不好的方面是响应的统计数据也会丢掉,默认3600s |
-| suspend_timeout           | 在SUSPEND命令暂停或者用-R重新启动期间等待缓冲区刷新的秒数,如果在此时间内flush不成功，连接将被丢弃 |
-| query_timeout             | 运行时间超过该时间值的SQL会被终止.此值应该设置得比SQL的实际运行时间长一些,也应该比数据库的statement_timeout参数配置的值大一些.这个参数主要是为了便于应付一些未知网络问题.设置此值可防止查询被长时间hang住.默认值为0,表示禁止此功能  测试:设置query_timeout=1,在客户端运行超过1s的SQL报错如下 |
-| query_wait_timeout        | 一个请求在队列中等待被执行的最长时间,如果超过此时间还没有被分配到连接,则此客户端连接将会被断开.这主要为了防止数据库hang住后,客户端到pgbouncer的连接也一直被hang住,默认值为120s,如果设置为0则客户端无线排队等待 |
-| client_idle_timeout       | 如果客户端空闲该时间值后,一直不发送命令,则断开与此客户端的连接.这一般是为了防止客户端上的TCP连接实际上因为网络问题关闭,但是pgbouncer上相应的连接没有检测到客户端已经不存在而一直存在.默认值为0,表示禁止此功能 |
-| idle_transaction_timeout  | 客户端启动事务后,超过此时间值还不提交事务,则关闭这个客户端连接,防止客户端消耗pgbouncer及数据库的资源,默认为0,表示禁止此功能 |
-| pkt_buf                   | 用于指定网络包的内部缓冲区大小,该值会影响发出的TCP包大小即内存使用大小.实际的libpq数据包可以比这个大,所以没有必要设置的太大.默认值为4096,一般保值这个值即可 |
-| max_packet_size           | 通过pgbouncer的最大包大小,这个包可以是一个SQL,也可以是一个SQL的返回结果集,有可能这个结果集非常大.默认为2147483647 |
-| listen_backlog            | TCP监听函数listen的Backlog参数,默认是128,通过man 2 listen可查看backlog的含义  backlog参数定义sockfd的挂起连接队列可能增长的最大长度。如果在队列已满时连接请求到达，则客户端可能会收到带有ECONNREFUSED指示的错误，或者如果底层协议支持重传，则可能会忽略该请求，以便连接中的后续重新尝试成功 |
-| sbuf_loopcnt              | 在处理过程中,每个连接处理多少数据后切换到下一个连接.如果没有这个限制那么有可能会出现一个连接发送或者接收大量数据时,可能会导致其他连接饿死.如果设置为0表示不限制.默认值是5 |
-| tcp_defer_accept          | 此选项值的详细说明从linux下 man 7 tcp中获取.在linux下次默认值为45,其他平台为0 |
-| tcp_socket_buffer         | 默认未设置                                                   |
-| tcp_keepalive             | 是否以操作系统的默认值打开基本的keepalive设置.在linux操作系统下探活的相关默认设置为net.ipv4.tcp_keepalive_time = 7200, net.ipv4.tcp_keepalive_intvl = 75, net.ipv4.tcp_keepalive_probes = 9这些值默认偏大,一般根据实际情况调整 |
-| tcp_keepcnt               | 默认未设置                                                   |
-| tcp_keepidle              | 默认未设置                                                   |
-| tcp_keepintvl             | 默认未设置                                                   |
-
 ## 启动
 
 ```shell
@@ -215,6 +157,90 @@ show config
 > * key：配置变量名称 
 > * value：配置值 
 > * changeable：yes 或 no,显示这个变量是否可以在运行时修改如果为 no,那么这个变量只能在启动的时候修改
+
+下表是执行show config;的结果。一下的key都可以在pgbouncer.ini的[pgbouncer]中配置：
+
+| key                       | value                                                  | changeable |
+| ------------------------- | ------------------------------------------------------ | ---------- |
+| job_name                  | pgbouncer                                              | no         |
+| conffile                  | pgbouncer.ini                                          | yes        |
+| logfile                   | /home/yfshi/pgbouncer/pgbouncer.log                    | yes        |
+| pidfile                   | /home/yfshi/pgbouncer/pgbouncer.pid                    | no         |
+| listen_addr               | 192.168.2.113                                          | no         |
+| listen_port               | 55556                                                  | no         |
+| listen_backlog            | 128                                                    | no         |
+| unix_socket_dir           | /tmp                                                   | no         |
+| unix_socket_mode          | 511                                                    | no         |
+| unix_socket_group         |                                                        | no         |
+| auth_type                 | trust                                                  | yes        |
+| auth_file                 | /home/yfshi/pgbouncer/userlist.txt                     | yes        |
+| auth_hba_file             |                                                        | yes        |
+| auth_user                 |                                                        | yes        |
+| auth_query                | SELECT usename, passwd FROM pg_shadow WHERE usename=$1 | yes        |
+| pool_mode                 | session                                                | yes        |
+| max_client_conn           | 200                                                    | yes        |
+| default_pool_size         | 100                                                    | yes        |
+| min_pool_size             | 0                                                      | yes        |
+| reserve_pool_size         | 0                                                      | yes        |
+| reserve_pool_timeout      | 5                                                      | yes        |
+| max_db_connections        | 0                                                      | yes        |
+| max_user_connections      | 0                                                      | yes        |
+| syslog                    | 0                                                      | yes        |
+| syslog_facility           | daemon                                                 | yes        |
+| syslog_ident              | pgbouncer                                              | yes        |
+| user                      |                                                        | no         |
+| autodb_idle_timeout       | 3600                                                   | yes        |
+| server_reset_query        | DISCARD ALL                                            | yes        |
+| server_reset_query_always | 0                                                      | yes        |
+| server_check_query        | select 1                                               | yes        |
+| server_check_delay        | 30                                                     | yes        |
+| query_timeout             | 0                                                      | yes        |
+| query_wait_timeout        | 120                                                    | yes        |
+| client_idle_timeout       | 0                                                      | yes        |
+| client_login_timeout      | 60                                                     | yes        |
+| idle_transaction_timeout  | 0                                                      | yes        |
+| server_lifetime           | 3600                                                   | yes        |
+| server_idle_timeout       | 600                                                    | yes        |
+| server_connect_timeout    | 15                                                     | yes        |
+| server_login_retry        | 15                                                     | yes        |
+| server_round_robin        | 0                                                      | yes        |
+| suspend_timeout           | 10                                                     | yes        |
+| ignore_startup_parameters |                                                        | yes        |
+| disable_pqexec            | 0                                                      | no         |
+| dns_max_ttl               | 15                                                     | yes        |
+| dns_nxdomain_ttl          | 15                                                     | yes        |
+| dns_zone_check_period     | 0                                                      | yes        |
+| max_packet_size           | 2147483647                                             | yes        |
+| pkt_buf                   | 4096                                                   | no         |
+| sbuf_loopcnt              | 5                                                      | yes        |
+| tcp_defer_accept          | 1                                                      | yes        |
+| tcp_socket_buffer         | 0                                                      | yes        |
+| tcp_keepalive             | 1                                                      | yes        |
+| tcp_keepcnt               | 0                                                      | yes        |
+| tcp_keepidle              | 0                                                      | yes        |
+| tcp_keepintvl             | 0                                                      | yes        |
+| verbose                   | 0                                                      | yes        |
+| admin_users               | yfshi                                                  | yes        |
+| stats_users               |                                                        | yes        |
+| stats_period              | 60                                                     | yes        |
+| log_connections           | 1                                                      | yes        |
+| log_disconnections        | 1                                                      | yes        |
+| log_pooler_errors         | 1                                                      | yes        |
+| application_name_add_host | 0                                                      | yes        |
+| client_tls_sslmode        | disable                                                | no         |
+| client_tls_ca_file        |                                                        | no         |
+| client_tls_cert_file      |                                                        | no         |
+| client_tls_key_file       |                                                        | no         |
+| client_tls_protocols      | all                                                    | no         |
+| client_tls_ciphers        | fast                                                   | no         |
+| client_tls_dheparams      | auto                                                   | no         |
+| client_tls_ecdhcurve      | auto                                                   | no         |
+| server_tls_sslmode        | disable                                                | no         |
+| server_tls_ca_file        |                                                        | no         |
+| server_tls_cert_file      |                                                        | no         |
+| server_tls_key_file       |                                                        | no         |
+| server_tls_protocols      | all                                                    | no         |
+| server_tls_ciphers        | HIGH:MEDIUM:+3DES:!aNULL                               | no         |
 
 show pools
 
