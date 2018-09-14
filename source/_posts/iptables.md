@@ -2,6 +2,7 @@
 layout: _post
 title: iptables
 date: 2018-09-14 16:35:52
+categories: 操作系统
 tags:
 - iptables
 - netfilter
