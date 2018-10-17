@@ -125,12 +125,11 @@ $ pip install psutil lockfile paramiko setuptools
 
 > python2.6+yum的使用：
 >
-> 安装python和工具：sudo yum install -y python python-setuptools
+> 安装python和工具：sudo yum install -y python python-setuptools python-devel python-crypto python-paramiko
 >
 > 安装python模块：
 > sudo easy_install lockfile
 > sudo easy_install psi
-> sudo easy_install paramiko
 
 ## ninja
 
