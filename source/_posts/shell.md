@@ -88,6 +88,56 @@ done
 
 上面是一段shell中命令行处理的实现。
 
+```shell
+#!/bin/bash
+
+DBHOME="$GPHOME"
+UPDATEFILE=""
+HOSTFILE=""
+
+ROOTDIR=`pwd`
+BASEDIR=$(cd `dirname $0`; pwd)
+PROGRAM=${0##*/}
+
+Usage() {
+	echo "$PROGRAM is a local dongle update tool."
+	echo
+	echo "Usage:"
+	echo "  $PROGRAM [OPTION] UPDATEFILE"
+	echo
+	echo "Options:"
+	echo "  -d DBHOME         Database installation path, default \"\$GPHOME\"."
+	echo "  -f HOSTFILE       This specifies the file that lists the hosts"
+	echo "                    onto which you want to install Greenplum Database."
+}
+
+# show help
+if [ "x$1" = "x--help" ] || [ "x$1" = "x-?" ]; then
+	Usage
+	exit 0
+fi
+
+while getopts "d:f:" opt;
+do
+	case $opt in
+		d)
+			DBHOME=$OPTARG
+			;;
+		f)
+			HOSTFILE=$OPTARG
+			;;
+		?)
+			echo "Invalid options: -$OPTARG"
+			exit 1;;
+	esac
+done
+
+# UPDATEFILE
+eval UPDATEFILE="$""$OPTIND"
+```
+
+
+
 # exec与文件描述符
 
 对于Linux而言，所有对设备和文件的操作都使用文件描述符来进行的。
