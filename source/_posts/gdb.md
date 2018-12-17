@@ -16,36 +16,57 @@ info handle # 查看所有信号的处理方式
 handle SIGUSR2 nostop noprint pass #设置信号处理方式
 ```
 
-| 动作    | 解释                 |
-| ------- | -------------------- |
-| print   | 收到信号打印         |
-| noprint | 收到信号不打印       |
-| stop    | 收到信号中断         |
-| notop   | 收到信号不中断       |
-| pass    | 收到信号传递给程序   |
+| 动作      | 解释         |
+| ------- | ---------- |
+| print   | 收到信号打印     |
+| noprint | 收到信号不打印    |
+| stop    | 收到信号中断     |
+| notop   | 收到信号不中断    |
+| pass    | 收到信号传递给程序  |
 | nopass  | 收到信号不传递给程序 |
 
 # 设置源代码路径
 
 在A机器上gcc编译的执行文件test，放到B机器去执行。在B机器上gdb调试test，怎么在gdb中查看源代码。
 
-有两种方法：
+有几种方法：
 
-1. 把代码放到编译机完全相同的路径
+1. 把源代码放到编译机完全相同的路径
 
    ```shell
-   # readelf -P .debug_str test
-   # mkdir <code_dir>
+   $ readelf -P .debug_str test
+   $ mkdir <code_dir>
    ```
 
-2. 使用gdb的substitute-path映射功能
+2. 使用gdb的substitute-path路径映射功能
+
+   `set substitute-path <FROM> <TO>`
+
+   FROM是编译时的代码路径。上述命令等于替换路径前缀，用TO替换FROM。
 
    ```shell
-   # readelf -P .debug_str test
-   # gdb ./test
-   (gdb) set substitute-path <source_dir> <current_dir>
+   $ readelf -P .debug_str test
+   $ gdb ./test
+   (gdb) set substitute-path /home/gdb/code/test /current-code
    (gdb) list
    ```
+
+3. 使用gdb的direcotory功能，把direcotry指定的路径加入到源代码搜索路径，缺点是不能递归搜索
+
+   ```shell
+   (gdb) show directories 
+   Source directories searched: $cdir:$cwd
+   (gdb) directory /code
+   (gdb) show directories 
+   Source directories searched: /home/postgres:$cdir:$cwd
+   (gdb) list
+   ```
+
+4. 把二进制文件移动到源代码路径
+
+5. 编译时增加`-fdebug-prefix-map=old_path=new_path`
+
+   在编译阶段用new_path替代old_path，这种方式比较暴力。
 
 # 多进程调试
 
@@ -59,15 +80,15 @@ set detach-on-fork [on|off]
 
 gdb调试线程的常用命令如下：
 
-| gdb命令                           | 描述                                                         |
-| --------------------------------- | ------------------------------------------------------------ |
-| info thread                       | 显示所有线程                                                 |
-| thread ID                         | 切换到ID指定的线程                                           |
-| break xxx.c:10 thread all         | 所有线程都在xxx.c文件的第10行断点，all可以换成单个线程ID     |
+| gdb命令                             | 描述                                       |
+| --------------------------------- | ---------------------------------------- |
+| info thread                       | 显示所有线程                                   |
+| thread ID                         | 切换到ID指定的线程                               |
+| break xxx.c:10 thread all         | 所有线程都在xxx.c文件的第10行断点，all可以换成单个线程ID       |
 | thread apply all COMMON           | 所有线程都执行COMMOND命令，也可以把all换成单个线程ID         |
 | set scheduler-locking off/on/step | 在调试某一线程时，其他线程是否执行。off：不锁定任何线程，默认值。on：锁定其他线程，只有当前线程运行。step：在step单步调试时，只有被调试线程运行。 |
-| set non-stop on/off               | 当调试一个线程时，其他线程是否运行。默认off。                |
-| set pagination on/off             | 在使用backtrace时，在分页时是否停止。默认on。                |
+| set non-stop on/off               | 当调试一个线程时，其他线程是否运行。默认off。                 |
+| set pagination on/off             | 在使用backtrace时，在分页时是否停止。默认on。             |
 | set target-async on/off           | 同步和异步。同步，gdb在输出提示符之前等待程序报告一些线程已经终止的信息。而异步的则是直接返回。默认off。 |
 
 non-stop模式调试后台程序：
