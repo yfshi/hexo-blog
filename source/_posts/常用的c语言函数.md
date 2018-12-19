@@ -27,23 +27,23 @@ bool setLogFile(const char *logFile)
     return true;
 }
 
-#define LOG(fmt, args...) \
+#define LOG(fmt, ...) \
     do { \
         fprintf(stdout, "%s [LOG]:--"fmt"--%s:%d\n", \
-                GetCurrentTime(), ##args, __FILE__, __LINE__); \
+                GetCurrentTime(), ##__VA_ARGS__, __FILE__, __LINE__); \
     } while (0)
 
-#define ELOG(fmt, args...) \
+#define ELOG(fmt, ...) \
     do { \
         fprintf(stderr, "%s [ERROR]:--"fmt"--%s:%d\n", \
-                GetCurrentTime(), ##args, __FILE__, __LINE__); \
+                GetCurrentTime(), ##__VA_ARGS__, __FILE__, __LINE__); \
     } while (0)
 
-#define DLOG(fmt, args...) \
+#define DLOG(fmt, ...) \
     do { \
         if (EnableDebug) \
             fprintf(stdout, "%s [DEBUG]:--"fmt"--%s:%d\n", \
-                    GetCurrentTime(), ##args, __FILE__, __LINE__); \
+                    GetCurrentTime(), ##__VA_ARGS__, __FILE__, __LINE__); \
     } while (0)
 
 #define FormErrMsg(errMsg,errLen,fmt,args...) \
