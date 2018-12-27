@@ -46,13 +46,6 @@ bool setLogFile(const char *logFile)
                     GetCurrentTime(), ##__VA_ARGS__, __FILE__, __LINE__); \
     } while (0)
 
-#define FormErrMsg(errMsg,errLen,fmt,args...) \
-    do { \
-        if (errMsg != NULL && errLen > 0) \
-            snprintf((errMsg), (errLen), "%s_%d-"fmt, __FILE__, __LINE__, ##args); \
-    } while (0)
-```
-
 # 二进制转十六机制
 
 ```c
