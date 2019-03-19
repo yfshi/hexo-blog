@@ -183,4 +183,73 @@ read $line2
 echo $line2
 exec 0<&100 100>&-
 read $line3
+
 ```
+
+# 多进程
+
+如下，每个进程的任务就是等待10秒，进程任务完成之后再启动一个新的进程，保证并发数是8。
+通过命名管道控制进程数量。
+
+```bash
+#!/bin/bash
+
+tmpfifo=$$.fifo
+
+trap "exec 1000>&-;exec 1000<&-;exit 0" 2 3 15
+
+mkfifo $tmpfifo
+exec 1000<>$tmpfifo
+rm -f $tmpfifo
+
+for ((i=1;i<=8;i++))
+do
+	echo >&1000
+done
+
+while true
+do
+	let t++
+	read -u 1000
+	{
+		sleep 10
+		echo >&1000
+	} &
+done
+
+wait
+
+echo "done!!!"
+```
+
+# 格式判断
+
+```bash
+#!/bin/bash
+
+check_format() {
+    local type=$1
+    local var=$2
+    local ret=0
+
+    [ $# -ne 2 ] && return 1
+
+    case $type in
+        "STRING")
+            [ "x$var" = "x" ] && ret=2
+            ;;  
+        "NUMBER")
+            echo $var | grep -Ev '^[0-9]{1,}$' > /dev/null 2>&1 && ret=2
+            ;;  
+        *)  
+            ret=2
+    esac
+
+    return $ret
+}
+
+[ `check_format NUMBER asdfsa` -ne 0 ] && exit 1
+
+exit 0
+```
+
