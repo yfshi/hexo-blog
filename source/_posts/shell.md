@@ -253,3 +253,109 @@ check_format() {
 exit 0
 ```
 
+# 字符串处理
+
+## 字符串分割
+
+shell如何用指定的分隔符来分割字符串为一个数组？这里介绍两种方法
+
+方法一
+
+```shell
+#!/bin/bash
+string="hello,shell,word"
+array=(${string//,/ })
+for var in ${array[@]}
+do
+	echo $var
+done
+```
+
+方法二
+
+```shell
+#!/bin/bash
+string="hello,shell,word"
+OLD_IFS="$IFS"
+IFS=","
+array=($string)
+IFS="$OLD_IFS"
+for var in ${array[@]}
+do
+	echo $var
+done
+```
+
+## 字符串截取
+
+| 格式                     | 说明                                                         |
+| :----------------------- | :----------------------------------------------------------- |
+| ${string:start:length}   | 从 string 字符串的左边第 start 个字符开始，向右截取 length 个字符。 |
+| ${string:start}          | 从 string 字符串的左边第 start 个字符开始截取，直到最后。    |
+| ${string:0-start:length} | 从 string 字符串的右边第 start 个字符开始，向右截取 length 个字符。 |
+| ${string:0-start}        | 从 string 字符串的右边第 start 个字符开始截取，直到最后。    |
+| ${string#*chars}         | 从 string 字符串第一次出现 *chars 的位置开始，截取 *chars 右边的所有字符。 |
+| ${string##*chars}        | 从 string 字符串最后一次出现 *chars 的位置开始，截取 *chars 右边的所有字符。 |
+| ${string%chars*}         | 从 string 字符串第一次出现 *chars 的位置开始，截取 *chars 左边的所有字符。 |
+| ${string%%chars*}        | 从 string 字符串最后一次出现 *chars 的位置开始，截取 *chars 左边的所有字符。 |
+
+### 从指定位置开始截取
+
+```shell
+${string:start:length}
+${string:0-start:length}
+```
+
+string是要截取的字符串，start是起始位置，length是要截取的长度（省略表示直到字符串的末尾）。
+
+注意：
+
+1. 从左边开始计数，其实数字是0；从右边开始计数，其实数字是1。
+2. 不管从哪边开始计数，截取方向都是从左到右。
+
+例：
+
+```shell
+#!/bin/bash
+
+url="abcdefghijklmn"
+echo ${url:2}
+echo ${url:5:3}       
+echo ${url:0-3}
+echo ${url:0-10:5}
+```
+
+输出：
+
+```shell
+cdefghijklmn
+fgh
+lmn
+efghi
+```
+
+### 从指定字符串开始截取
+
+这种截取方式无法指定长度，只能从指定字符串截取到字符串末尾。可以截取指定字符串右边的所有字符，也可以截取左边的所有字符。
+
+```shell
+${string#*chars}
+${string##*chars}
+${string%chars*}
+${string%%chars*}
+```
+
+其中，string是要截取的字符串，chars是指定的字符串，`*`是通配符的一种，表示任意长度的字符串。`*chars`连起来使用的意思是忽略左边的所有字符，知道遇见chars。
+
+例：
+
+```shell
+#!/bin/bash
+
+url="1234123412341234"
+echo ${url#*23}
+echo ${url##*23}
+echo ${url%23*}
+echo ${url%%23*}
+```
+
