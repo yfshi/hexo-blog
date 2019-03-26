@@ -196,7 +196,7 @@ openlog() {
 	file=$1
 	exec 6>&1     # 把6绑定到标准输出，即把标准输出1复制到6
 	exec 7>&2     # 把7绑定到标准错误
-	exec 1>$file  # 把标准输出绑定到文件
+	exec 1>$file  # 把标准输出绑定到文件  exec 1>$file 是绑定追加
 	exec 2>$file  # 把标准错误绑定到文件
 }
 
