@@ -36,6 +36,17 @@ a="ls -l"
 eval $a
 ```
 
+# 变量的间接引用 ${!var}
+即以变量名作为新的变量，取新变量的值
+```bash
+function test() {
+	v=$1
+	echo ${!v}
+}
+x=10
+test x
+```
+
 # getopt与getopts
 
 getopt可以处理unix和GNU格式的参数。
@@ -88,7 +99,7 @@ done
 
 上面是一段shell中命令行处理的实现。
 
-```shell
+```bash
 #!/bin/bash
 
 DBHOME="$GPHOME"
@@ -297,7 +308,7 @@ shell如何用指定的分隔符来分割字符串为一个数组？这里介绍
 
 方法一
 
-```shell
+```bash
 #!/bin/bash
 string="hello,shell,word"
 array=(${string//,/ })
@@ -309,7 +320,7 @@ done
 
 方法二
 
-```shell
+```bash
 #!/bin/bash
 string="hello,shell,word"
 OLD_IFS="$IFS"
@@ -337,7 +348,7 @@ done
 
 ### 从指定位置开始截取
 
-```shell
+```bash
 ${string:start:length}
 ${string:0-start:length}
 ```
@@ -351,7 +362,7 @@ string是要截取的字符串，start是起始位置，length是要截取的长
 
 例：
 
-```shell
+```bash
 #!/bin/bash
 
 url="abcdefghijklmn"
@@ -363,7 +374,7 @@ echo ${url:0-10:5}
 
 输出：
 
-```shell
+```bash
 cdefghijklmn
 fgh
 lmn
@@ -374,7 +385,7 @@ efghi
 
 这种截取方式无法指定长度，只能从指定字符串截取到字符串末尾。可以截取指定字符串右边的所有字符，也可以截取左边的所有字符。
 
-```shell
+```bash
 ${string#*chars}
 ${string##*chars}
 ${string%chars*}
@@ -385,7 +396,7 @@ ${string%%chars*}
 
 例：
 
-```shell
+```bash
 #!/bin/bash
 
 url="1234123412341234"
