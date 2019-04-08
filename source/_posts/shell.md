@@ -406,3 +406,13 @@ echo ${url%23*}
 echo ${url%%23*}
 ```
 
+# ssh
+
+```bash
+$ ssh -T -o StrictHostKeyChecking=no <<EOF
+# 不允许定义和使用变量，可以读取外部变量，不能给外部变量赋值
+# 可以定义函数，函数内部不能使用变量和参数，不能使用外部函数
+# 此处执行子shell无效，等同与在ssh之外执行，如`ls`和$(ls)
+EOF
+```
+
