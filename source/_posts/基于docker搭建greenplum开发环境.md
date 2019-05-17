@@ -89,13 +89,28 @@ passwd gpadmin
 exit
 
 # 把该容器制作为镜像
-docker commit -a yfshi -m "develop environment for greenplum" dev centos-dev
+docker commit -a yfshi -m "develop environment for greenplum" dev centos-gpdb
 
 #  基于新镜像启动容器
-docker run -dit --privileged --net syf_net --ip 10.0.0.2 -dit --name dev1 centos /usr/sbin/init
+docker run -dit --privileged --net syf_net --ip 10.0.0.2 -dit --name dev1 centos-gpdb /usr/sbin/init
 
 # 打开终端，可以以ssh方式或docker方式
 docker exec -it dev1 /bin/bash
 # 或
 ssh gpadmin@10.0.0.2
 ```
+
+# 备份镜像
+
+为了防止镜像丢失，可以把镜像导出到文件。之后可以通过该文件导入镜像。
+
+有两种方式，一种是通过save/load镜像方式，一种是通过export/import容器方式。区别是export/import不保留历史记录（docker history IMAGE）。
+
+```shell
+# 把centos-gpdb镜像导出到文件centos-gpdb.tar
+docker save -o centos-gpdb.tar centos-gpdb
+
+# 导入centos-gpdb.tar
+docker load -i centos-gpdb.tar
+```
+
