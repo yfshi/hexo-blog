@@ -114,3 +114,21 @@ docker save -o centos-gpdb.tar centos-gpdb
 docker load -i centos-gpdb.tar
 ```
 
+
+
+
+
+
+
+
+
+附：docker建立ubuntu桌面版，通过vnc连接
+
+```shell
+# 启动容器
+$ docker run -d --name=ubuntu -p 5901:5901 -p 6901:6901 --hostname ubuntu --user $(id -u) --net sys_net --ip 10.0.0.200 -e VNC_PW=yfshi -e VNC_RESOLUTION=1280x800  consol/ubuntu-xfce-vnc
+
+# 使用浏览器访问: x.x.x.x:6901
+# 使用vnc客户端访问：x.x.x.x:5901
+```
+
