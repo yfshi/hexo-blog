@@ -5,7 +5,7 @@ date: 2018-07-10 19:34:45
 tags:
 - PostgreSQL
 - Greenplum
-categories: Database
+categories: Greenplum
 ---
 
 > 操作系统：centos6.4 x64最小安装

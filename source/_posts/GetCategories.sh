@@ -18,7 +18,7 @@ ListAll()
 
 List()
 {
-	cat *.md | grep categories | sort | uniq | awk '{print $2}'
+	cat *.md | grep '^categories' | sort | uniq | awk '{print $2}'
 }
 
 case $1 in

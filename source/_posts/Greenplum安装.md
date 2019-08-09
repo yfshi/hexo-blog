@@ -5,7 +5,7 @@ date: 2018-07-10 19:40:00
 tags:
 - PostgreSQL
 - Greenplum
-categories: Database
+categories: Greenplum
 ---
 
 节点分配：

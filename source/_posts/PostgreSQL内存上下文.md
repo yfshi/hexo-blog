@@ -5,7 +5,7 @@ date: 2018-01-11 15:05:42
 tags:
 - PostgreSQL
 - 内存管理
-categories: Database
+categories: PostgreSQL
 ---
 
 # 内存管理体系结构
