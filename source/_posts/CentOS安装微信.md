@@ -4,8 +4,8 @@ title: CentOS安装微信
 date: 2020-09-01 10:23:44
 categories: 操作系统
 tags:
-微信
-wechat
+- 微信
+- wechat
 ---
 
 # CentOS安装微信
