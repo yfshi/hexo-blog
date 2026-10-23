@@ -135,7 +135,7 @@ onMount(() => {
 		on:keydown={onKeydown}
 		spellcheck="false"
 		disabled={status !== "ready"}
-		class="w-full min-h-56 resize-y rounded-lg border border-black/10 bg-[var(--codeblock-bg)] p-3 font-mono text-sm leading-relaxed text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] disabled:opacity-60 dark:border-white/15 dark:text-neutral-100"
+		class="w-full min-h-56 resize-y rounded-lg border border-black/10 bg-[var(--btn-regular-bg)] p-3 font-mono text-sm leading-relaxed text-neutral-900 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] disabled:opacity-60 dark:border-white/15 dark:text-neutral-100"
 	></textarea>
 
 	<div class="flex flex-wrap items-center gap-2">
