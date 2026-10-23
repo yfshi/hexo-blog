@@ -25,7 +25,7 @@ pnpm preview    # 预览构建结果
 - `src/content/posts/`：文章（Markdown）
 - `src/config.ts`：站点信息、导航、个人资料、主题色
 - `astro.config.mjs`：站点 URL、base、Markdown/代码高亮等配置
-- `public/`：静态资源，按原路径存放（`/img`、`/docs`、`/download`、`CNAME`）
+- `public/`：静态资源，按原路径存放（`/img`、`/docs`、`/download`、`.nojekyll`）
 
 ## 新建文章
 
@@ -49,13 +49,25 @@ draft: false
 
 ## 部署
 
-推送到 `master` 分支后，GitHub Actions（`.github/workflows/deploy.yml`）会自动构建并将 `dist/` 发布到 `yfshi/yfshi.github.io` 仓库。
+站点发布在 `yfshi.github.io` 仓库（访问 https://yfshi.github.io/）。
 
-需在仓库 Secrets 中配置 `PERSONAL_TOKEN`（对 `yfshi.github.io` 有写权限的 PAT）。
+方式一：本地手动部署（无需额外配置）
+
+```shell
+pnpm build
+cd dist
+git init && git add -A && git commit -m "deploy"
+git push -f git@github.com:yfshi/yfshi.github.io.git master
+```
+
+方式二：GitHub Actions 自动部署（推荐长期使用）
+
+推送到 `master` 分支后，`.github/workflows/deploy.yml` 会自动构建并发布到 `yfshi/yfshi.github.io`。
+需先在仓库 Secrets 中配置 `PERSONAL_TOKEN`（对 `yfshi.github.io` 有写权限的 PAT）。
 
 ## 迁移说明
 
-- 原 Hexo 站点保留在 `master` 分支历史中，本次迁移在 `astro` 分支进行。
+- 原 Hexo 站点代码保留在 `master` 分支（及其历史）中，本次迁移在 `astro` 分支进行。
 - 文章由 Hexo 迁移至 `src/content/posts/`，front matter 已转换为 Fuwari 格式：
   - `date` → `published`
   - `categories` → `category`（取第一个）

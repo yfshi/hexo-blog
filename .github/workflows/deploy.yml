@@ -43,4 +43,3 @@ jobs:
           external_repository: yfshi/yfshi.github.io
           publish_branch: master
           publish_dir: ./dist
-          cname: shiyuefei.top
