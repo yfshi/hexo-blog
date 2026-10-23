@@ -1,0 +1,22 @@
+---
+import PglitePlayground from "../components/pglite/PglitePlayground.svelte";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+---
+
+<MainGridLayout
+	title="PGlite Playground"
+	description="在浏览器中运行 PostgreSQL 的 PGlite 演示"
+>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+		<div class="card-base z-10 px-9 py-6 relative w-full">
+			<h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">PGlite Playground</h1>
+			<p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+				<a href="https://pglite.dev/" target="_blank" rel="noreferrer" class="link-underline">PGlite</a>
+				是编译为 WebAssembly 的 PostgreSQL，可直接在浏览器中运行。下面的 SQL 会在你的设备上执行，不会上传到任何服务器。
+			</p>
+			<div class="mt-6">
+				<PglitePlayground client:only="svelte" />
+			</div>
+		</div>
+	</div>
+</MainGridLayout>

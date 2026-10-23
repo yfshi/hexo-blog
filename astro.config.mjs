@@ -154,6 +154,10 @@ export default defineConfig({
 		],
 	},
 	vite: {
+		optimizeDeps: {
+			// PGlite 通过 new URL(..., import.meta.url) 定位 wasm/data，不能被预构建
+			exclude: ["@electric-sql/pglite"],
+		},
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {

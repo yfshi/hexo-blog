@@ -23,6 +23,9 @@ importers:
       '@astrojs/tailwind':
         specifier: ^6.0.2
         version: 6.0.2(astro@5.13.10(@types/node@24.5.2)(jiti@1.21.7)(lightningcss@1.29.3)(rollup@2.79.2)(sass@1.80.4)(stylus@0.64.0)(terser@5.43.1)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19(yaml@2.8.2))
+      '@electric-sql/pglite':
+        specifier: ^0.5.11
+        version: 0.5.11
       '@expressive-code/core':
         specifier: ^0.41.4
         version: 0.41.4
@@ -827,12 +830,6 @@ packages:
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.2.5':
-    resolution: {integrity: sha512-MYT+nZ38wEIWVcL5xLyOhYQQ7nlWD0b/4mgATW2c8dvq7R4OQjt/XGXFkXrmtWmQofaIM14L7V8qIz/M+bx5QQ==}
-    engines: {node: '>=14.21.3'}
-    cpu: [arm64]
-    os: [darwin]
-
   '@biomejs/cli-darwin-x64@2.2.5':
     resolution: {integrity: sha512-FLIEl73fv0R7dI10EnEiZLw+IMz3mWLnF95ASDI0kbx6DDLJjWxE5JxxBfmG+udz1hIDd3fr5wsuP7nwuTRdAg==}
     engines: {node: '>=14.21.3'}
@@ -893,6 +890,9 @@ packages:
   '@ctrl/tinycolor@4.2.0':
     resolution: {integrity: sha512-kzyuwOAQnXJNLS9PSyrk0CWk35nWJW/zl/6KvnTBMFK65gm7U1/Z5BqjxeapjZCIhQcM/DsrEmcbRwDyXyXK4A==}
     engines: {node: '>=14'}
+
+  '@electric-sql/pglite@0.5.11':
+    resolution: {integrity: sha512-SWuqsTjA4DDWqgZ05PC1RJaq8e00p5KACxbqaikDFQ8dIGA0SLRzuPniky7IW+q/c5RDNMdEXwv7mFBWIx9Hxw==}
 
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -6488,7 +6488,6 @@ snapshots:
 
   '@biomejs/biome@2.2.5':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.2.5
       '@biomejs/cli-darwin-x64': 2.2.5
       '@biomejs/cli-linux-arm64': 2.2.5
       '@biomejs/cli-linux-arm64-musl': 2.2.5
@@ -6496,9 +6495,6 @@ snapshots:
       '@biomejs/cli-linux-x64-musl': 2.2.5
       '@biomejs/cli-win32-arm64': 2.2.5
       '@biomejs/cli-win32-x64': 2.2.5
-
-  '@biomejs/cli-darwin-arm64@2.2.5':
-    optional: true
 
   '@biomejs/cli-darwin-x64@2.2.5':
     optional: true
@@ -6538,6 +6534,8 @@ snapshots:
       postcss-selector-parser: 7.1.0
 
   '@ctrl/tinycolor@4.2.0': {}
+
+  '@electric-sql/pglite@0.5.11': {}
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:

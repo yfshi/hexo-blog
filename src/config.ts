@@ -45,6 +45,10 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
+			name: "PGlite",
+			url: "/pglite/", // Internal links should not include the base path, as it is automatically added
+		},
+		{
 			name: "GitHub",
 			url: "https://github.com/yfshi", // Internal links should not include the base path, as it is automatically added
 			external: true, // Show an external link icon and will open in a new tab
