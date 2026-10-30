@@ -1,15 +1,36 @@
 <script lang="ts">
-import { PGlite } from "@electric-sql/pglite";
+import { type Extension, PGlite } from "@electric-sql/pglite";
+import { amcheck } from "@electric-sql/pglite/contrib/amcheck";
+import { bloom } from "@electric-sql/pglite/contrib/bloom";
+import { btree_gin } from "@electric-sql/pglite/contrib/btree_gin";
+import { btree_gist } from "@electric-sql/pglite/contrib/btree_gist";
+import { citext } from "@electric-sql/pglite/contrib/citext";
+import { cube } from "@electric-sql/pglite/contrib/cube";
+import { earthdistance } from "@electric-sql/pglite/contrib/earthdistance";
+import { fuzzystrmatch } from "@electric-sql/pglite/contrib/fuzzystrmatch";
 import { hstore } from "@electric-sql/pglite/contrib/hstore";
+import { intarray } from "@electric-sql/pglite/contrib/intarray";
 import { ltree } from "@electric-sql/pglite/contrib/ltree";
+import { pageinspect } from "@electric-sql/pglite/contrib/pageinspect";
+import { pg_buffercache } from "@electric-sql/pglite/contrib/pg_buffercache";
+import { pg_freespacemap } from "@electric-sql/pglite/contrib/pg_freespacemap";
+import { pg_stat_statements } from "@electric-sql/pglite/contrib/pg_stat_statements";
 import { pg_trgm } from "@electric-sql/pglite/contrib/pg_trgm";
+import { pg_visibility } from "@electric-sql/pglite/contrib/pg_visibility";
+import { pg_walinspect } from "@electric-sql/pglite/contrib/pg_walinspect";
 import { pgcrypto } from "@electric-sql/pglite/contrib/pgcrypto";
+import { seg } from "@electric-sql/pglite/contrib/seg";
+import { tablefunc } from "@electric-sql/pglite/contrib/tablefunc";
+import { unaccent } from "@electric-sql/pglite/contrib/unaccent";
 import { uuid_ossp } from "@electric-sql/pglite/contrib/uuid_ossp";
 import { live } from "@electric-sql/pglite/live";
 import { age } from "@electric-sql/pglite-age";
+import { pg_hashids } from "@electric-sql/pglite-pg_hashids";
 import { pg_ivm } from "@electric-sql/pglite-pg_ivm";
+import { pg_textsearch } from "@electric-sql/pglite-pg_textsearch";
 import { pg_uuidv7 } from "@electric-sql/pglite-pg_uuidv7";
 import { pgmq } from "@electric-sql/pglite-pgmq";
+import { pgtap } from "@electric-sql/pglite-pgtap";
 import { vector } from "@electric-sql/pglite-pgvector";
 import { onDestroy, onMount } from "svelte";
 
@@ -59,6 +80,25 @@ type PGliteWithLive = PGlite & {
 	};
 };
 
+// PGlite 0.5.13 会把多个 shared_preload_libraries 写成未加引号的逗号列表，
+// 导致 PostgreSQL 启动时报语法错误。这里先移除各自声明的预加载项，再合并为带引号的单个值注入。
+function withoutSharedPreload(extension: Extension): Extension {
+	return {
+		...extension,
+		setup: async (...args) => {
+			const result = await extension.setup(...args);
+			return { ...result, sharedPreloadLibraries: [] };
+		},
+	};
+}
+
+const combinedPreload: Extension = {
+	name: "__combined_preload",
+	setup: async () => ({
+		sharedPreloadLibraries: ["'pg_stat_statements,pg_textsearch'"],
+	}),
+};
+
 const EXTENSION_NAMES = [
 	"pg_trgm",
 	"pgcrypto",
@@ -71,6 +111,27 @@ const EXTENSION_NAMES = [
 	"age",
 	"pgmq",
 	"live",
+	"citext",
+	"unaccent",
+	"fuzzystrmatch",
+	"intarray",
+	"seg",
+	"cube",
+	"earthdistance",
+	"tablefunc",
+	"bloom",
+	"btree_gin",
+	"btree_gist",
+	"pg_stat_statements",
+	"pg_buffercache",
+	"pg_freespacemap",
+	"pg_visibility",
+	"pg_walinspect",
+	"amcheck",
+	"pageinspect",
+	"pg_textsearch",
+	"pg_hashids",
+	"pgtap",
 ];
 
 const EXAMPLES: Example[] = [
@@ -214,6 +275,89 @@ $$) AS (a agtype, b agtype);
 
 RESET search_path;`,
 	},
+	{
+		id: "builtins",
+		label: "文本 / 类型工具",
+		sql: `SELECT
+  'Hello'::citext = 'hello' AS case_insensitive,
+  unaccent('Hôtel') AS unaccented,
+  levenshtein('kitten', 'sitting') AS edit_distance,
+  soundex('Robert') AS soundex;
+
+SELECT
+  icount('{1,2,3}'::int[]) AS intarray_count,
+  '1..5'::seg && '3..9'::seg AS seg_overlap,
+  cube_distance('(0,0)'::cube, '(3,4)'::cube) AS cube_distance;
+
+SELECT round(earth_distance(
+  ll_to_earth(39.9, 116.4),
+  ll_to_earth(31.2, 121.5)
+) / 1000) AS beijing_shanghai_km;
+
+SELECT count(*) AS normal_rand_rows FROM normal_rand(5, 0, 1);`,
+	},
+	{
+		id: "indexes",
+		label: "bloom / GIN / GiST 索引",
+		sql: `DROP TABLE IF EXISTS idx_demo;
+
+CREATE TABLE idx_demo (id INT, tags TEXT, score INT);
+
+INSERT INTO idx_demo VALUES (1, 'a', 10), (2, 'b', 20), (3, 'c', 30);
+
+CREATE INDEX idx_demo_bloom ON idx_demo
+  USING bloom (tags, score) WITH (length = 80, col1 = 2, col2 = 2);
+CREATE INDEX idx_demo_gin ON idx_demo USING gin (tags);
+CREATE INDEX idx_demo_gist ON idx_demo USING gist (score);
+
+SELECT indexname FROM pg_indexes
+WHERE tablename = 'idx_demo'
+ORDER BY indexname;`,
+	},
+	{
+		id: "textsearch",
+		label: "pg_textsearch BM25",
+		sql: `DROP TABLE IF EXISTS ts_docs;
+
+CREATE TABLE ts_docs (
+  id SERIAL PRIMARY KEY,
+  content TEXT NOT NULL
+);
+
+INSERT INTO ts_docs (content) VALUES
+  ('PostgreSQL full text search'),
+  ('Browser database with PGlite'),
+  ('BM25 ranking made simple'),
+  ('Vector search and full text search');
+
+CREATE INDEX ts_docs_bm25 ON ts_docs
+  USING bm25 (content) WITH (text_config = 'english');
+
+SELECT id, content
+FROM ts_docs
+ORDER BY content <@> to_bm25query('full text search', 'ts_docs_bm25')
+LIMIT 5;`,
+	},
+	{
+		id: "hashids",
+		label: "pg_hashids 短 ID",
+		sql: `SELECT
+  id_encode(1001) AS short_id,
+  id_encode(1001, 'pglite', 8) AS salted_id;
+
+SELECT id_decode('jNl') AS decoded_ids;`,
+	},
+	{
+		id: "pgtap",
+		label: "pgTAP 测试",
+		sql: `SELECT plan(3);
+
+SELECT ok(1 + 1 = 2, 'math still works');
+SELECT is('PGlite'::text, 'PGlite', 'text equality');
+SELECT pass('pgTAP is running in the browser');
+
+SELECT * FROM finish();`,
+	},
 ];
 
 let sql = EXAMPLES[0].sql;
@@ -271,6 +415,27 @@ async function installExtensions(instance: PGliteWithLive): Promise<void> {
 		["pg_ivm", "CREATE EXTENSION IF NOT EXISTS pg_ivm"],
 		["age", "CREATE EXTENSION IF NOT EXISTS age"],
 		["pgmq", "CREATE EXTENSION IF NOT EXISTS pgmq"],
+		["citext", "CREATE EXTENSION IF NOT EXISTS citext"],
+		["unaccent", "CREATE EXTENSION IF NOT EXISTS unaccent"],
+		["fuzzystrmatch", "CREATE EXTENSION IF NOT EXISTS fuzzystrmatch"],
+		["intarray", "CREATE EXTENSION IF NOT EXISTS intarray"],
+		["seg", "CREATE EXTENSION IF NOT EXISTS seg"],
+		["cube", "CREATE EXTENSION IF NOT EXISTS cube"],
+		["earthdistance", "CREATE EXTENSION IF NOT EXISTS earthdistance"],
+		["tablefunc", "CREATE EXTENSION IF NOT EXISTS tablefunc"],
+		["bloom", "CREATE EXTENSION IF NOT EXISTS bloom"],
+		["btree_gin", "CREATE EXTENSION IF NOT EXISTS btree_gin"],
+		["btree_gist", "CREATE EXTENSION IF NOT EXISTS btree_gist"],
+		["pg_stat_statements", "CREATE EXTENSION IF NOT EXISTS pg_stat_statements"],
+		["pg_buffercache", "CREATE EXTENSION IF NOT EXISTS pg_buffercache"],
+		["pg_freespacemap", "CREATE EXTENSION IF NOT EXISTS pg_freespacemap"],
+		["pg_visibility", "CREATE EXTENSION IF NOT EXISTS pg_visibility"],
+		["pg_walinspect", "CREATE EXTENSION IF NOT EXISTS pg_walinspect"],
+		["amcheck", "CREATE EXTENSION IF NOT EXISTS amcheck"],
+		["pageinspect", "CREATE EXTENSION IF NOT EXISTS pageinspect"],
+		["pg_textsearch", "CREATE EXTENSION IF NOT EXISTS pg_textsearch"],
+		["pg_hashids", "CREATE EXTENSION IF NOT EXISTS pg_hashids"],
+		["pgtap", "CREATE EXTENSION IF NOT EXISTS pgtap"],
 	];
 	const failures: string[] = [];
 	for (const [name, statement] of statements) {
@@ -346,6 +511,28 @@ async function init(): Promise<void> {
 				age,
 				pg_ivm,
 				pgmq,
+				citext,
+				unaccent,
+				fuzzystrmatch,
+				intarray,
+				seg,
+				cube,
+				earthdistance,
+				tablefunc,
+				bloom,
+				btree_gin,
+				btree_gist,
+				pg_stat_statements: withoutSharedPreload(pg_stat_statements),
+				pg_buffercache,
+				pg_freespacemap,
+				pg_visibility,
+				pg_walinspect,
+				amcheck,
+				pageinspect,
+				pg_textsearch: withoutSharedPreload(pg_textsearch),
+				pg_hashids,
+				pgtap,
+				__combined_preload: combinedPreload,
 			},
 		}) as unknown as PGliteWithLive;
 		db = instance;
@@ -408,7 +595,7 @@ onDestroy(() => {
 	<div class="flex flex-wrap items-center gap-2 text-sm">
 		{#if status === "loading"}
 			<span class="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-500"></span>
-			<span class="text-neutral-600 dark:text-neutral-400">正在加载 PGlite 与扩展…（首次约 17 MB）</span>
+			<span class="text-neutral-600 dark:text-neutral-400">正在加载 PGlite 与扩展…（首次约 18 MB）</span>
 		{:else if status === "ready"}
 			<span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
 			<span class="text-neutral-600 dark:text-neutral-400">PostgreSQL 已在浏览器中就绪，数据仅存在于当前页面</span>
