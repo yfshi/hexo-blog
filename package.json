@@ -19,7 +19,7 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/svelte": "7.2.3",
+    "@astrojs/svelte": "9.1.2",
     "@astrojs/tailwind": "^6.0.2",
     "@electric-sql/pglite": "^0.5.13",
     "@electric-sql/pglite-age": "^0.0.14",
